@@ -3,21 +3,22 @@ const router = express.Router();
 
 const {
     tableById,
+    list,
     create,
     read,
     update,
     remove,
-    list,
 } = require("../controllers/table");
-const { requireSignin, isAuth, isAdmin, isWaiter } = require("../controllers/auth"); 
+const { requireSignin, 
+        isAuth, 
+        isAdmin, 
+        isWaiter } = require("../controllers/auth"); 
 const { userById } = require("../controllers/user");
  
-router.get("/table/:tableId",
-    requireSignin,
-    isAuth, 
-    read
-);
-
+// LIST TABLES
+router.get("/tables", list);
+ 
+// ADD TABLE
 router.post("/table/create/:userId", 
     requireSignin, 
     isAuth, 
@@ -25,6 +26,15 @@ router.post("/table/create/:userId",
     create
 );
 
+// READ TABLE
+router.get("/table/:tableId/:userId",
+    requireSignin,
+    isAuth,
+    isWaiter,
+    read
+);
+
+// UPDATE TABLE
 router.put(
     "/table/:tableId/:userId",
     requireSignin,
@@ -33,6 +43,7 @@ router.put(
     update
 );
 
+// DELETE TABLE
 router.delete(
     "/table/:tableId/:userId",
     requireSignin,
@@ -41,8 +52,9 @@ router.delete(
     remove
 );
 
-router.get("/tables", list);
+
  
+// params
 router.param("tableId", tableById);
 router.param("userId", userById);
  

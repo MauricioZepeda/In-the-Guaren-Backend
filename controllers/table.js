@@ -13,6 +13,17 @@ exports.tableById = (req, res, next, id) => {
             next();
         });
 };
+
+exports.list = (req, res) => {
+    Table.find().exec((err, data) => {
+        if (err) {
+            return res.status(400).json({
+                error: errorHandler(err)
+            });
+        }
+        res.json(data);
+    });
+};
  
 exports.create = (req, res) => {
     const table = new Table(req.body);
@@ -68,13 +79,3 @@ exports.remove = (req, res) => {
     });
 };
  
-exports.list = (req, res) => {
-    Table.find().exec((err, data) => {
-        if (err) {
-            return res.status(400).json({
-                error: errorHandler(err)
-            });
-        }
-        res.json(data);
-    });
-};

@@ -1,8 +1,10 @@
 const express = require("express");
 const router = express.Router();
 
+// imports
 const { signup, signin, signout } = require("../controllers/auth");
 const { signUpValidator, signInValidator } = require("../validators/user");
+
 
 router.post("/signup", signUpValidator, signup);
 

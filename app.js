@@ -13,7 +13,7 @@ const swaggerUi = require("swagger-ui-express");
  const authRoutes = require("./routes/auth"); 
  const userRoutes = require("./routes/user");
  const tableRoutes = require("./routes/table");  
-// const categoryRoutes = require("./routes/category");
+ const categoryRoutes = require("./routes/category");
 // const productRoutes = require("./routes/product"); 
 // const chairRoutes = require("./routes/chair");  
 
@@ -76,7 +76,7 @@ app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocs));
 app.use("/api", authRoutes);
 app.use("/api", userRoutes);
 app.use("/api", tableRoutes);
-// app.use("/api", categoryRoutes);
+app.use("/api", categoryRoutes);
 // app.use("/api", productRoutes);
 // app.use("/api", chairRoutes);
  

@@ -11,12 +11,14 @@ const tableSchema = new mongoose.Schema(
         number: {
             type: Number,
             trim: true,
-            required: true 
+            required: true,
+            unique: true
         },          
         capacity: {
             type: Number,
             trim: true,
-            required: true 
+            required: true,
+            default: 4
         }, 
         status: {
             type: String,
