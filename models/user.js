@@ -29,7 +29,7 @@ const userSchema = new mongoose.Schema({
     enabled: {
         type: Boolean,
         default: true
-    },
+    }
 }, {timestamps: true});
 
 userSchema

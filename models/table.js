@@ -23,8 +23,12 @@ const tableSchema = new mongoose.Schema(
         status: {
             type: String,
             default: "Open",
-            enum: ["Open", "Busy", "Closed", "Disabled"]  
-        } 
+            enum: ["Open", "Busy", "Closed"]  
+        }, 
+        enabled: {
+            type: Boolean,
+            default: true
+        }
     },
     { timestamps: true }
 );

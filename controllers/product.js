@@ -16,7 +16,7 @@ exports.productById = (req, res, next, id) => {
                 });
             }
     
-            if (!user) {
+            if (!product) {
                 return res.status(404).json({
                     error: "Product not found"
                 });
@@ -28,8 +28,63 @@ exports.productById = (req, res, next, id) => {
 };
 
   
+exports.create = (req, res) => {
+    let form = new formidable.IncomingForm();
+    form.keepExtensions = true;
+    form.parse(req, (err, fields, files) => {
+        if (err) {
+            return res.status(400).json({
+                error: "Image could not be uploaded"
+            });
+        }
+        // check for all fields
+        const {
+            name,
+            description,
+            price,
+            category
+        } = fields;
+
+        if (
+            !name ||
+            !description ||
+            !price ||
+            !category  
+        ) {
+            return res.status(400).json({
+                error: "All fields are required"
+            });
+        }
+
+        let product = new Product(fields);
+
+        // 1kb = 1000
+        // 1mb = 1000000
+        if (files.photo) {
+            if (files.photo.size > 1000000) {
+                return res.status(400).json({
+                    error: "Image should be less than 1mb in size"
+                });
+            }
+            product.photo.data = fs.readFileSync(files.photo.path);
+            product.photo.contentType = files.photo.type;
+        }
+
+        product.save((err, result) => {
+            if (err) {
+                return res.status(400).json({
+                    error: errorHandler(err)
+                });
+            }
+            res.json(result);
+        });
+    });
+};
+
 exports.list = (req, res) => {
-    Product.find().exec((err, data) => {
+    Product.find()
+    .select("-photo")
+    .exec((err, data) => {
         if (err) {
             return res.status(400).json({
                 error: errorHandler(err)
@@ -38,19 +93,7 @@ exports.list = (req, res) => {
         res.json(data);
     });
 };
-
-exports.create = (req, res) => {
-    const product = new Product(req.body);
-    product.save((err, data) => {
-        if (err) {
-            return res.status(400).json({
-                error: errorHandler(err)
-            });
-        }
-        res.json( { data });
-    });
-};
-
+ 
 exports.read = (req, res) => {
     return res.json(req.product);
 };
@@ -103,3 +146,10 @@ exports.remove = (req, res) => {
     });
 };
 
+exports.photo = (req, res, next) => {
+    if (req.product.photo.data) {
+        res.set("Content-Type", req.product.photo.contentType);
+        return res.send(req.product.photo.data);
+    }
+    next();
+};
