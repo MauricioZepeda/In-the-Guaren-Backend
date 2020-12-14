@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');  
-const { ObjectId } = mongoose.Schema; 
+const itemSchema = require('./item');
 
 const chairSchema = new mongoose.Schema(
     { 
@@ -7,14 +7,10 @@ const chairSchema = new mongoose.Schema(
             type: Number,
             trim: true,
             required: true 
-        },   
-        order: { 
-            type: ObjectId, 
-            ref: "Order",
-            required: true
-        } 
+        }, 
+        items: [itemSchema]
     },
     { timestamps: true }
 );
   
-module.exports = mongoose.model("Chair", chairSchema);
+module.exports = chairSchema;

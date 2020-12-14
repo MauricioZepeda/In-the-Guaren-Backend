@@ -2,12 +2,7 @@ const mongoose = require('mongoose');
 const { ObjectId } = mongoose.Schema; 
   
 const itemSchema = new mongoose.Schema(
-    {    
-        chair: { 
-            type: ObjectId, 
-            ref: "Chair",
-            required: true
-        },  
+    {   
         product: { 
             type: ObjectId, 
             ref: "Product",
@@ -32,4 +27,4 @@ const itemSchema = new mongoose.Schema(
     { timestamps: true }
 ); 
 
-module.exports = mongoose.model("Item", itemSchema);
+module.exports = itemSchema;

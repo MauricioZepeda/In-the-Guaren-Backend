@@ -33,7 +33,6 @@ router.post("/chair/addOrder/:tableId/:userId",
     isAuth,
     isWaiter,
     getOrder, 
-    getChair,
     addOrder
 );
 
