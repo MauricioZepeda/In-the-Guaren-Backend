@@ -12,5 +12,5 @@ const chairSchema = new mongoose.Schema(
     },
     { timestamps: true }
 );
-  
-module.exports = chairSchema;
+   
+module.exports = chairSchema;  

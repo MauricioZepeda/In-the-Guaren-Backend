@@ -16,7 +16,7 @@ const itemSchema = new mongoose.Schema(
         status: {
             type: String,
             default: "Ingresed",
-            enum: ["Ingresed", "Confirmed", "Returned", "Payed"]  
+            enum: ["Ingresed", "Ordered", "Returned", "Payed"]  
         },
         waiter: {
             type: ObjectId,

@@ -1,32 +1,37 @@
-const Chair = require("../models/chair");
-const Item = require("../models/item");
 const Product = require("../models/product");
-const {errorHandler} = require("../helpers/dbErrorHandler");
+const {errorHandler} = require("../helpers/dbErrorHandler"); 
+ 
+exports.chairById = (req, res, next, id) => { 
+    category.findById(id)
+        .populate("items")
+        .exec((err, chair) => {
+            if (err) {
+                return res.status(400).json({
+                    error: errorHandler(err)
+                });
+            }
 
-exports.chairById = (req, res, next, id) => {
-    Chair
-    .findById(id)
-    .populate("orders")
-    .exec((err, chair) => {
-        if (err) {
-            return res.status(400).json({
-                error: errorHandler(err)
-            });
-        }
+            if (!chair) {
+                return res.status(404).json({
+                    error: "Chair does not exist"
+                });
+            }
 
-        if (!chair) {
-            return res.status(404).json({
-                error: "Chair does not exist"
-            });
-        }
-
-        req.chair = chair;
-        next();
+            req.chair = chair;
+            next();
     });
 };
 
 exports.read = (req, res) => {
-    return res.json(req.chair);
+    const { order, body : {number} } = req;  
+    
+    const chair = order.chairs.find(chair => chair.number == number)
+
+    if(!chair){
+        return res.status(404).json({ error: "Chair not found" })
+    }
+
+    return res.json(chair);
 };
 
 exports.remove = (req, res) => {
@@ -42,16 +47,8 @@ exports.remove = (req, res) => {
 };
 
 exports.list = (req, res) => {
-    Chair
-    .find()
-    .exec((err, data) => {
-        if (err) {
-            return res.status(400).json({
-                error: errorHandler(err)
-            });
-        }
-        res.json(data);
-    });
+    const { order } = req; 
+    return res.json(order.chairs); 
 };
 
 exports.addOrder = (req, res) => {  
