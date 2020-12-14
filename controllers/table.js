@@ -2,16 +2,23 @@ const Table = require("../models/table");
 const { errorHandler } = require("../helpers/dbErrorHandler");
 
 exports.tableById = (req, res, next, id) => {
-    Table.findById(id)
-        .exec((err, table) => {
-            if (err || !table) {
-                return res.status(404).json({
-                    error: "Table does not exist"
-                });
-            }
-            req.table = table;
-            next();
-        });
+    Table
+    .findById(id)
+    .exec((err, table) => { 
+        if (err) {
+            return res.status(400).json({
+                error: errorHandler(err)
+            });
+        }
+
+        if (!table) {
+            return res.status(404).json({
+                error: "Table does not exist"
+            });
+        } 
+        req.table = table;
+        next();
+    });
 };
 
 exports.list = (req, res) => {

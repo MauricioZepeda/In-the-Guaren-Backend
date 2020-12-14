@@ -15,7 +15,8 @@ const swaggerUi = require("swagger-ui-express");
  const tableRoutes = require("./routes/table");  
  const categoryRoutes = require("./routes/category");
  const productRoutes = require("./routes/product"); 
-// const chairRoutes = require("./routes/chair");  
+ const chairRoutes = require("./routes/chair");  
+ const orderRoutes = require("./routes/order");  
 
 const app = express();
 
@@ -78,8 +79,9 @@ app.use("/api", userRoutes);
 app.use("/api", tableRoutes);
 app.use("/api", categoryRoutes);
 app.use("/api", productRoutes);
-// app.use("/api", chairRoutes);
- 
+app.use("/api", chairRoutes);
+app.use("/api", orderRoutes); 
+
 // listen port
 app.listen(port, () => {
     console.log(`Server is running on port ${port}`);
