@@ -1,11 +1,12 @@
 const express = require("express");
 const router = express.Router();
 
-const { chairById, list, read, remove, addOrder } = require('../controllers/chair');
 const { requireSignin, isAuth, isWaiter } = require("../controllers/auth"); 
 const { userById } = require("../controllers/user"); 
-const { tableById } = require("../controllers/table");  
 const { getOrder, orderById }= require("../controllers/order");  
+const { tableById } = require("../controllers/table");  
+const { chairById, list, read, remove, addOrder } = require('../controllers/chair');
+const { getProduct }= require("../controllers/product");  
 
 router.get("/chairs/:orderId/:userId",
     requireSignin, 
@@ -25,6 +26,7 @@ router.delete("/chair/remove/:chairId/:userId",
     requireSignin, 
     isAuth,
     isWaiter, 
+    getOrder,
     remove
 );
 
@@ -33,6 +35,7 @@ router.post("/chair/addOrder/:tableId/:userId",
     isAuth,
     isWaiter,
     getOrder, 
+    getProduct,
     addOrder
 );
 

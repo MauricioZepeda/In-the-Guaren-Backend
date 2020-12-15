@@ -7,7 +7,8 @@ const Product = require("../models/product");
 const { errorHandler } = require("../helpers/dbErrorHandler");
  
 exports.productById = (req, res, next, id) => { 
-    Product.findById(id)
+    Product.findById(id) 
+        .select("-photo")
         .populate("category")
         .exec((err, product) => {
             if (err) {
@@ -27,6 +28,21 @@ exports.productById = (req, res, next, id) => {
         });
 };
 
+exports.getProduct = (req, res, next) => {   
+
+    Product.findById(req.body.product)
+        .select("-photo")    
+        .exec((err,product)=>{
+            if (err || !product) {  
+                return res.status(404).json({
+                    error: "Product not found"
+                })
+            }
+
+            req.product = product;
+            next();
+        })
+}
   
 exports.create = (req, res) => {
     let form = new formidable.IncomingForm();
