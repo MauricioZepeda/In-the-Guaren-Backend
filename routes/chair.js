@@ -1,11 +1,11 @@
 const express = require("express");
 const router = express.Router();
-
-const { list, read, remove, addItem, removeItem } = require('../controllers/chair');
+ 
+const { list, read, remove, addItem, removeItem } = require('../controllers/chair'); 
 const { requireSignin, isAuth, isWaiter } = require("../controllers/auth"); 
 const { userById } = require("../controllers/user"); 
-const { tableById } = require("../controllers/table");  
 const { getOrder, orderById }= require("../controllers/order");  
+const { tableById } = require("../controllers/table");    
 
 router.get("/chairs/:orderId/:userId",
     requireSignin, 
@@ -24,7 +24,7 @@ router.get("/chair/:orderId/:userId",
 router.delete("/chair/remove/:orderId/:userId",
     requireSignin, 
     isAuth,
-    isWaiter, 
+    isWaiter,  
     remove
 );
 
@@ -32,8 +32,9 @@ router.post("/chair/addItem/:tableId/:userId",
     requireSignin, 
     isAuth,
     isWaiter,
-    getOrder, 
+    getOrder,  
     addItem
+ 
 );
 
 router.delete("/chair/removeItem/:orderId/:userId",

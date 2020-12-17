@@ -91,21 +91,21 @@ exports.addItem = (req, res) => {
 
 exports.removeItem = (req, res) => {
     const { order } = req;
-    const { chair: chairId, item: itemId } = req.body;
-    const chairFound = order.chairs.find(chair => chair._id == chairId)
-    
+    const { chair: chairId, item: itemID } = req.body;
+    const chairFound = order.chairs.find(chair => chair._id === chairId)
+
     if(chairFound){
-        const itemFound = chairFound.items.find(item => item._id == itemId) 
+        const itemFound = chair.items.find(item => item._id === itemID)
         if(itemFound){
-            if(itemFound.status === 'Ingresed'){ 
-                chairFound.items = chairFound.items.filter(item => item._id != itemId) 
+            if(itemFound.status === 'Ingresed'){
+                order.chairs = order.chairs.filter(chair => chair.number != number); 
                 order.save((err, data)=>{
                     if(err){
                         return res.status(400).json({
                             error: errorHandler(err)
                         });
                     } 
-                    return res.json({message: `Item deleted successfully.`}); 
+                    return  res.json({message: `Chair ${number} deleted successfully.`}); 
                 }); 
             }else{
                 res.status(404).json({ error: `Can not delete, item has processed.` })
