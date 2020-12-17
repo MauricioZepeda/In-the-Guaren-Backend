@@ -25,7 +25,7 @@ const uniqueMessage = error => {
 /**
  * Get the erroror message from error object
  */
-exports.errorHandler = error => {
+exports.errorHandler = (error, model='') => {
     let message = "";
 
     if (error.code) {
@@ -37,14 +37,10 @@ exports.errorHandler = error => {
             default:
                 message = "Something went wrong";
         }
-    } else {
-        for (let errorName in error.errorors) {
-            if (error.errorors[errorName].message) 
-                message = error
-                    .errorors[errorName]
-                    .message;
-            }
-        }
+        return message;
+    } else { 
+        return `Something went wrong${ (model ? ` with ${model} id` : '') }` 
+    }
 
-    return message;
+    
 };

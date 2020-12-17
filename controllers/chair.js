@@ -1,27 +1,6 @@
 const Product = require("../models/product");
-const {errorHandler} = require("../helpers/dbErrorHandler"); 
- 
-exports.chairById = (req, res, next, id) => { 
-    category.findById(id)
-        .populate("items")
-        .exec((err, chair) => {
-            if (err) {
-                return res.status(400).json({
-                    error: errorHandler(err)
-                });
-            }
-
-            if (!chair) {
-                return res.status(404).json({
-                    error: "Chair does not exist"
-                });
-            }
-
-            req.chair = chair;
-            next();
-    });
-};
-
+const {errorHandler} = require("../helpers/dbErrorHandler");  
+  
 exports.read = (req, res) => {
     const { order, body : {number} } = req;  
     
@@ -35,15 +14,28 @@ exports.read = (req, res) => {
 };
 
 exports.remove = (req, res) => {
-    let chair = req.chair;
-    chair.remove((err, data) => {
-        if (err) {
-            return res
-                .status(400)
-                .json({error: errorHandler(err)});
-        }
-        res.json({message: `Chair ${data.number} deleted successfully`});
-    });
+    const { order, body: { number } } = req;
+    const chair = order.chairs.find(chair => chair.number == number)
+  
+    if(chair){
+        const isProcessed = chair.items.some(item => item.status !== 'Ingresed') 
+       
+        if(isProcessed){
+            res.status(404).json({ error: `Can not delete, chair has items processed.` })
+        }else{  
+            order.chairs = order.chairs.filter(chair => chair.number != number); 
+            order.save((err, data)=>{
+                if(err){
+                    return res.status(400).json({
+                        error: errorHandler(err)
+                    });
+                } 
+                return  res.json({message: `Chair ${number} deleted successfully.`}); 
+            }); 
+        } 
+    }else{
+        res.status(404).json({ error: 'Chair not found' })
+    } 
 };
 
 exports.list = (req, res) => {
@@ -51,7 +43,7 @@ exports.list = (req, res) => {
     return res.json(order.chairs); 
 };
 
-exports.addOrder = (req, res) => {  
+exports.addItem = (req, res) => {  
     const { order, body, profile } = req; 
 
     Product
@@ -73,8 +65,7 @@ exports.addOrder = (req, res) => {
                 console.log( chair.number == body.number)
                 return chair.number == body.number
             })
-
-            console.log(order.chairs);
+ 
             if(chair.length === 0){
                 const chair = {
                     number : body.number,
@@ -98,3 +89,31 @@ exports.addOrder = (req, res) => {
     );
 }
 
+exports.removeItem = (req, res) => {
+    const { order } = req;
+    const { chair: chairId, item: itemId } = req.body;
+    const chairFound = order.chairs.find(chair => chair._id == chairId)
+    
+    if(chairFound){
+        const itemFound = chairFound.items.find(item => item._id == itemId) 
+        if(itemFound){
+            if(itemFound.status === 'Ingresed'){ 
+                chairFound.items = chairFound.items.filter(item => item._id != itemId) 
+                order.save((err, data)=>{
+                    if(err){
+                        return res.status(400).json({
+                            error: errorHandler(err)
+                        });
+                    } 
+                    return res.json({message: `Item deleted successfully.`}); 
+                }); 
+            }else{
+                res.status(404).json({ error: `Can not delete, item has processed.` })
+            }
+        }else{
+            res.status(404).json({ error: 'Item not found' })
+        }
+    }else{
+        res.status(404).json({ error: 'Chair not found' })
+    } 
+}

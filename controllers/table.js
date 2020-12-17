@@ -7,7 +7,7 @@ exports.tableById = (req, res, next, id) => {
     .exec((err, table) => { 
         if (err) {
             return res.status(400).json({
-                error: errorHandler(err)
+                error: errorHandler(err, 'Table')
             });
         }
 
