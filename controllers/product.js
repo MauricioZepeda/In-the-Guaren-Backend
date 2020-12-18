@@ -98,21 +98,19 @@ exports.create = (req, res) => {
 
 exports.list = (req, res) => {
     Product.find()
-    .select("-photo")
-    .exec((err, data) => {
-        if (err) {
-            return res.status(400).json({
-                error: errorHandler(err)
+            .select("-photo")
+            .exec((err, data) => {
+                if (err) {
+                    return res.status(400).json({
+                        error: errorHandler(err)
+                    });
+                }
+                res.json(data);
             });
-        }
-        res.json(data);
-    });
 };
  
-exports.read = (req, res) => {
-    return res.json(req.product);
-};
-
+exports.read = (req, res) =>  res.json(req.product);
+ 
 exports.update = (req, res) => { 
     let form = new formidable.IncomingForm();
     form.keepExtensions = true;
@@ -127,9 +125,10 @@ exports.update = (req, res) => {
         product = _.extend(product, fields);
  
         if (files.photo) {
-            if (files.photo.size > 1000000 * 2) { // 2mb = (1000000  * 2)
+            const size = Number(process.env.MAX_IMG_SIZE_MB) || 1;
+            if (files.photo.size > 1000000 * size) { // example: 3mb = (1000000  * 3)
                 return res.status(400).json({
-                    error: "Image should be less than 2mb in size"
+                    error: `Image should be less than ${size}mb in size` 
                 });
             }
             product.photo.data = fs.readFileSync(files.photo.path);
