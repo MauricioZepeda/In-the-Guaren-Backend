@@ -40,6 +40,7 @@ router.post("/chair/addItem/:tableId/:userId",
 router.delete("/chair/removeItem/:orderId/:userId",
     requireSignin, 
     isAuth,
+    isWaiter,
     removeItem
 );
 
