@@ -1,46 +1,51 @@
 const express = require("express");
 const router = express.Router();
  
-const { list, read, remove, addItem, removeItem } = require('../controllers/chair'); 
+const { getChair, getItem, listChairs, readChair, removeChair, addItem, removeItem } = require('../controllers/chair'); 
 const { requireSignin, isAuth, isWaiter } = require("../controllers/auth"); 
 const { userById } = require("../controllers/user"); 
 const { getOrder, orderById }= require("../controllers/order");  
-const { tableById } = require("../controllers/table");    
+const { tableById } = require("../controllers/table");  
+const { getProduct } = require("../controllers/product");    
 
 router.get("/chairs/:orderId/:userId",
     requireSignin, 
     isAuth,
     isWaiter, 
-    list
+    listChairs
 );
 
 router.get("/chair/:orderId/:userId", 
     requireSignin,     
     isAuth,  
     isWaiter, 
-    read
+    getChair,
+    readChair
 );
  
 router.delete("/chair/remove/:orderId/:userId",
     requireSignin, 
     isAuth,
     isWaiter,  
-    remove
+    getChair,
+    removeChair
 );
 
 router.post("/chair/addItem/:tableId/:userId",
     requireSignin, 
     isAuth,
     isWaiter,
-    getOrder,  
-    addItem
- 
+    getOrder,
+    getProduct, 
+    addItem 
 );
 
 router.delete("/chair/removeItem/:orderId/:userId",
     requireSignin, 
     isAuth,
     isWaiter,
+    getChair,
+    getItem,
     removeItem
 );
 

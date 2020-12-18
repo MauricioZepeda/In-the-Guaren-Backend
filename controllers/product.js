@@ -28,8 +28,7 @@ exports.productById = (req, res, next, id) => {
         });
 };
 
-exports.getProduct = (req, res, next) => {   
-
+exports.getProduct = (req, res, next) => {  
     Product.findById(req.body.product)
         .select("-photo")    
         .exec((err,product)=>{
