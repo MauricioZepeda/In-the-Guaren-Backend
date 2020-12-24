@@ -6,7 +6,7 @@ const { userById } = require("../controllers/user");
 const { getProduct } = require("../controllers/product");    
 const { getOrder, orderById }= require("../controllers/order");  
 const { tableById, getTable } = require("../controllers/table");  
-const { getChair, getItem, listChairs, readChair, removeChair, addItem, removeItem } = require('../controllers/chair'); 
+const { getChair, getItem, listChairs, readChair, removeChair, addItem, removeItem, returnItem } = require('../controllers/chair'); 
 
 router.get("/chairs/:orderId/:userId",
     requireSignin, 
@@ -48,6 +48,15 @@ router.delete("/chair/removeItem/:orderId/:userId",
     getChair,
     getItem,
     removeItem
+);
+
+router.post("/chair/returnItem/:orderId/:userId",
+    requireSignin, 
+    isAuth, 
+    isWaiter,
+    getChair,
+    getItem,
+    returnItem
 );
 
 router.param("tableId", tableById); 

@@ -32,7 +32,11 @@ const productSchema = new mongoose.Schema(
             type: ObjectId,
             ref: "Category",
             required: true
-        }
+        },
+        deleted: {
+            type: Boolean,
+            default: false
+        },
     },
     { timestamps: true }
 );

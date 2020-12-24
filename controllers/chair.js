@@ -13,7 +13,7 @@ exports.getChair = (req, res, next) => {
     }else{
        return res.status(404).json({ error: 'Chair not found' })
     }  
-}
+};
 
 exports.getItem = (req, res, next) => { 
     const { item: itemId } = req.body;  
@@ -25,7 +25,7 @@ exports.getItem = (req, res, next) => {
     }else{
        return res.status(404).json({ error: 'Item not found' })
     }  
-}
+};
  
 exports.readChair = (req, res) => res.json(req.chair);
 
@@ -100,7 +100,7 @@ exports.addItem = (req, res, next) => {
             return  res.json(dataOrder); 
         }); 
     }); 
-}
+};
 
 exports.removeItem = (req, res) => {
     const { order, chair, item } = req;
@@ -119,5 +119,26 @@ exports.removeItem = (req, res) => {
         }); 
     }else{
         res.status(404).json({ error: `Can not delete, item has processed.` })
+    } 
+};
+
+exports.returnItem = (req, res) => {
+    const { order, chair, item, profile } = req;
+    const { item: itemId } = req.body;  
+ 
+    if(item.status === 'Ordered'){
+        let item = chair.items.find(item => item._id == itemId); 
+        item.status = 'Returned';
+        order.save((err, data)=>{
+            if(err){
+                return res.status(400).json({
+                    error: errorHandler(err)
+                });
+            } 
+            
+            return  res.json({message: `Item returned successfully.`}); 
+        }); 
+    }else{
+        res.status(404).json({ error: `Only items on status Ordered can be returned.` })
     } 
 }

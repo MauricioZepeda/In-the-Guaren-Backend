@@ -1,9 +1,9 @@
 const Order = require("../models/order"); 
-const {errorHandler} = require("../helpers/dbErrorHandler"); 
+const { errorHandler } = require("../helpers/dbErrorHandler"); 
 
 exports.orderById = (req, res, next, id) => { 
     Order
-    .findById(id) 
+    .findById(id)
     .exec((err, order) => { 
         if (err) { 
             return res.status(400).json({
@@ -26,19 +26,6 @@ exports.read = (req, res) => {
     return res.json(req.order);
 };
 
-exports.remove = (req, res) => {
-    const order = req.order; 
-    
-    order.remove((err, data) => {
-        if (err) {
-            return res
-                .status(400)
-                .json({error: errorHandler(err)});
-        }
-        res.json({message: `Order deleted successfully`});
-    });
-};
- 
 exports.getOrder = (req, res, next) => {   
     const order = {
         table:  req.table._id,
@@ -89,4 +76,68 @@ exports.confirmOrder = (req, res) => {
      
         return  res.json(data); 
     }); 
-} 
+};
+
+exports.listOpen = (req, res) => {
+    Order.find({ closed:false }).exec((err, data) => {
+        if (err) {
+            return res.status(400).json({
+                error: errorHandler(err)
+            });
+        }
+        res.json(data);
+    });
+};
+ 
+exports.listClosed = (req, res) => {
+    Order.find({ closed:true }).exec((err, data) => {
+        if (err) {
+            return res.status(400).json({
+                error: errorHandler(err)
+            });
+        }
+        res.json(data);
+    });
+};
+
+exports.listAll = (req, res) => {
+    Order.find().exec((err, data) => {
+        if (err) {
+            return res.status(400).json({
+                error: errorHandler(err)
+            });
+        }
+        res.json(data);
+    });
+};
+ 
+ 
+exports.remove = (req, res) => {
+    const { order, table } = req;  
+    
+    const isProcessed = order.chairs.some(chair => chair.items.some(item => item.status !== 'Ingresed'))
+    
+    if(isProcessed){
+        res.status(404).json({ error: `Can not delete, order has items processed.` })
+    }else{ 
+        order.remove((err, data) => {
+            if (err) {
+                return res
+                    .status(400)
+                    .json({error: errorHandler(err)});
+            }
+ 
+            table.status = 'Open'; 
+            table.save((error, data)=>{
+                if(err){
+                    return res.status(400).json({
+                        error: errorHandler(error)
+                    });
+                }   
+            }); 
+ 
+            res.json({message: `Order deleted successfully`});
+        });
+    } 
+};
+

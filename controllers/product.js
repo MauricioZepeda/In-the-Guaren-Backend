@@ -23,6 +23,12 @@ exports.productById = (req, res, next, id) => {
                 });
             }
 
+            if(product.deleted){
+                return res.status(404).json({
+                    error: "Product was deleted"
+                }); 
+            }
+
             req.product = product;
             next();
         });
@@ -38,6 +44,12 @@ exports.getProduct = (req, res, next) => {
                 })
             }
 
+            if(product.deleted){
+                return res.status(404).json({
+                    error: "Product was deleted"
+                }); 
+            }
+            
             req.product = product;
             next();
         })
@@ -148,6 +160,7 @@ exports.update = (req, res) => {
 
 exports.remove = (req, res) => {
     const product = req.product;
+    
     product.remove((err, data) => {
         if (err) {
             return res.status(400).json({
