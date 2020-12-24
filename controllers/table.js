@@ -20,6 +20,28 @@ exports.tableById = (req, res, next, id) => {
         next();
     });
 };
+ 
+exports.getTable = (req, res, next) => {
+    const { order: {table} } = req;
+      
+    Table
+    .findById(table)
+    .exec((err, data) => { 
+        if (err) {
+            return res.status(400).json({
+                error: errorHandler(err, 'Table')
+            });
+        }
+
+        if (!data) {
+            return res.status(404).json({
+                error: "Table does not exist"
+            });
+        } 
+        req.table = data;
+        next();
+    });
+}
 
 exports.list = (req, res) => {
     Table.find().exec((err, data) => {

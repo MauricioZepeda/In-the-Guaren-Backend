@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 
-const { orderById, read, remove } = require('../controllers/order');
+const { orderById, read, remove, confirmOrder } = require('../controllers/order');
 const { requireSignin, isAuth, isWaiter } = require("../controllers/auth"); 
 const { userById } = require("../controllers/user");  
   
@@ -17,6 +17,13 @@ router.delete("/order/remove/:orderId/:userId",
     isAuth,
     isWaiter, 
     remove
+); 
+
+router.post("/order/confirm/:orderId/:userId",
+    requireSignin, 
+    isAuth,
+    isWaiter, 
+    confirmOrder
 ); 
 
 router.param("orderId", orderById); 

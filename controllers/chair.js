@@ -32,7 +32,7 @@ exports.readChair = (req, res) => res.json(req.chair);
 exports.listChairs = (req, res) => res.json(req.order.chairs);  
 
 exports.removeChair = (req, res) => {
-    const { order, chair } = req;  
+    const { order, chair, table } = req;  
     const isProcessed = chair.items.some(item => item.status !== 'Ingresed') 
     
     if(isProcessed){
@@ -44,14 +44,26 @@ exports.removeChair = (req, res) => {
                 return res.status(400).json({
                     error: errorHandler(err)
                 });
+            }  
+        
+            if(data.chairs.length === 0){ 
+                table.status = 'Open'; 
+                table.save((error, data)=>{
+                    if(err){
+                        return res.status(400).json({
+                            error: errorHandler(error)
+                        });
+                    }   
+                }); 
             } 
+
             return  res.json({message: 'Chair deleted successfully.' }); 
         }); 
     } 
 };
   
-exports.addItem = (req, res) => {  
-    const { order, product, body: { number }, profile } = req; 
+exports.addItem = (req, res, next) => {  
+    const { table, order, product, body: { number }, profile } = req; 
 
     const item = { 
         product: product._id,
@@ -71,13 +83,22 @@ exports.addItem = (req, res) => {
         chair.items.push(item);
     }
 
-    order.save((err, data)=>{
+    order.save((err, dataOrder)=>{
         if(err){
             return res.status(400).json({
                 error: errorHandler(err)
             });
-        } 
-        return res.json(data);
+        }   
+
+        table.status = 'Busy'; 
+        table.save((error, data)=>{
+            if(err){
+                return res.status(400).json({
+                    error: errorHandler(error)
+                });
+            }  
+            return  res.json(dataOrder); 
+        }); 
     }); 
 }
 
@@ -93,6 +114,7 @@ exports.removeItem = (req, res) => {
                     error: errorHandler(err)
                 });
             } 
+            
             return  res.json({message: `Item deleted successfully.`}); 
         }); 
     }else{

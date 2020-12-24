@@ -5,8 +5,7 @@ exports.orderById = (req, res, next, id) => {
     Order
     .findById(id) 
     .exec((err, order) => { 
-        if (err) {
-            console.log(err)
+        if (err) { 
             return res.status(400).json({
                 error: errorHandler(err, 'Order')
             });
@@ -68,4 +67,26 @@ exports.getOrder = (req, res, next) => {
             next();
         }  
     }); 
-}
+};
+
+exports.confirmOrder = (req, res) => {
+    const { order } = req; 
+    
+    order.chairs.forEach(chair => { 
+        chair.items.forEach(item => { 
+            if(item.status === 'Ingresed'){
+               item.status='Ordered';
+            }
+        })
+    });
+
+    order.save((err, data)=>{
+        if(err){
+            return res.status(400).json({
+                error: errorHandler(err)
+            });
+        }  
+     
+        return  res.json(data); 
+    }); 
+} 
