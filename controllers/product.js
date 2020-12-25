@@ -22,13 +22,7 @@ exports.productById = (req, res, next, id) => {
                     error: "Product not found"
                 });
             }
-
-            if(product.deleted){
-                return res.status(404).json({
-                    error: "Product was deleted"
-                }); 
-            }
-
+ 
             req.product = product;
             next();
         });
@@ -43,13 +37,7 @@ exports.getProduct = (req, res, next) => {
                     error: "Product not found"
                 })
             }
-
-            if(product.deleted){
-                return res.status(404).json({
-                    error: "Product was deleted"
-                }); 
-            }
-            
+ 
             req.product = product;
             next();
         })
@@ -108,8 +96,13 @@ exports.create = (req, res) => {
     });
 };
 
-exports.list = (req, res) => {
-    Product.find()
+exports.list = (req, res) => { 
+   
+    Product.find({ 
+                category: req.category._id, 
+                enabled: true, 
+                deleted: false 
+            })
             .select("-photo")
             .exec((err, data) => {
                 if (err) {
@@ -121,6 +114,19 @@ exports.list = (req, res) => {
             });
 };
  
+exports.listAll = (req, res) => {
+    Product.find({ category: req.category._id })
+            .select("-photo")
+            .exec((err, data) => {
+                if (err) {
+                    return res.status(400).json({
+                        error: errorHandler(err)
+                    });
+                }
+                res.json(data);
+            });
+};
+
 exports.read = (req, res) =>  res.json(req.product);
  
 exports.update = (req, res) => { 

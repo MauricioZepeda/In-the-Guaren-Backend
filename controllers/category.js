@@ -24,14 +24,28 @@ exports.categoryById = (req, res, next, id) => {
 
 
 exports.list = (req, res) => {
-    Category.find().exec((err, data) => {
-        if (err) {
-            return res.status(400).json({
-                error: errorHandler(err)
-            });
-        }
-        res.json(data);
-    });
+    Category.find({ enabled: true, deleted: false })
+        .exec((err, data) => {
+            if (err) {
+                return res.status(400).json({
+                    error: errorHandler(err)
+                });
+            }
+            res.json(data);
+        });
+};
+
+
+exports.listAll = (req, res) => {
+    Category.find()
+        .exec((err, data) => {
+            if (err) {
+                return res.status(400).json({
+                    error: errorHandler(err)
+                });
+            }
+            res.json(data);
+        });
 };
 
 exports.create = (req, res) => {

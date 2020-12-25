@@ -44,7 +44,7 @@ exports.getTable = (req, res, next) => {
 }
 
 exports.list = (req, res) => {
-    Table.find().exec((err, data) => {
+    Table.find({ enabled: true, deleted: false }).exec((err, data) => {
         if (err) {
             return res.status(400).json({
                 error: errorHandler(err)
@@ -53,6 +53,19 @@ exports.list = (req, res) => {
         res.json(data);
     });
 };
+
+exports.listAll = (req, res) => {
+    Table.find()
+        .exec((err, data) => {
+            if (err) {
+                return res.status(400).json({
+                    error: errorHandler(err)
+                });
+            }
+            res.json(data);
+        });
+};
+
  
 exports.create = (req, res) => {
     const table = new Table(req.body);

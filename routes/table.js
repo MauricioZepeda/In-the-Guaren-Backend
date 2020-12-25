@@ -8,6 +8,7 @@ const {
     read,
     update,
     remove,
+    listAll
 } = require("../controllers/table");
 const { requireSignin, 
         isAuth, 
@@ -18,6 +19,14 @@ const { userById } = require("../controllers/user");
 // LIST TABLES
 router.get("/tables", list);
  
+router.get("/tables/all/:userId", 
+    requireSignin, 
+    isAuth, 
+    isAdmin, 
+    listAll
+);
+
+
 // ADD TABLE
 router.post("/table/create/:userId", 
     requireSignin, 

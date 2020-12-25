@@ -3,7 +3,7 @@ const router = express.Router();
 
 // imports
 const { requireSignin, isAuth, isAdmin } = require("../controllers/auth");
-const { userById, read, update } = require("../controllers/user");
+const { userById, read, update, list } = require("../controllers/user");
  
 // SECRET ACCESS
 router.get("/secret/:userId", requireSignin, isAuth, isAdmin, (req, res) => {
@@ -11,6 +11,13 @@ router.get("/secret/:userId", requireSignin, isAuth, isAdmin, (req, res) => {
         user: req.profile
     });
 });
+
+router.get("/users/:userId",    
+    requireSignin, 
+    isAuth, 
+    isAdmin, 
+    list
+);
 
 // READ USER
 router.get("/user/:userId", 

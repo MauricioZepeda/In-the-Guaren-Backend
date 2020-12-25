@@ -17,6 +17,18 @@ exports.userById = (req, res, next, id) => {
             });
         }
 
+        if (!user.enabled) {
+            return res.status(404).json({
+                error: "User disabled"
+            });
+        }
+
+        if (user.deleted) {
+            return res.status(404).json({
+                error: "User was deleted"
+            });
+        }
+ 
         req.profile = user;
         next();
     });
@@ -45,3 +57,14 @@ exports.update = (req, res) => {
         }
     );
 }; 
+
+exports.list = (req, res) => {
+    User.find().exec((err, data) => {
+        if (err) {
+            return res.status(400).json({
+                error: errorHandler(err)
+            });
+        }
+        res.json(data);
+    });
+};

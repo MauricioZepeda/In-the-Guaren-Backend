@@ -2,12 +2,19 @@ const express = require("express");
 const router = express.Router();
 
 // imports
-const { categoryById, list, create, read, update, remove } = require("../controllers/category");
+const { categoryById, list, listAll, create, read, update, remove } = require("../controllers/category");
 const { requireSignin, isAuth, isAdmin } = require("../controllers/auth");
 const { userById } = require("../controllers/user");
  
 // LIST CATEGORIES
 router.get("/categories", list);
+
+router.get("/categories/all/:userId", 
+    requireSignin, 
+    isAuth, 
+    isAdmin, 
+    listAll
+);
 
 // ADD CATEGORY
 router.post("/category/create/:userId", 

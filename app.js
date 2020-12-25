@@ -45,7 +45,7 @@ app.use(expressValidator());
 app.use(cors());
 
 // port
-const port = process.env.PORT || 6001;
+const port = process.env.PORT || 5001;
 
 const swaggerOptions = {
     swaggerDefinition:{
