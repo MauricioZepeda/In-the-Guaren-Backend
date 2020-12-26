@@ -6,8 +6,8 @@ const {
     list,
     create,
     read,
-    update,
-    remove,
+    updateWaiter,
+    updateAdmin,
     listAll
 } = require("../controllers/table");
 const { requireSignin, 
@@ -26,7 +26,6 @@ router.get("/tables/all/:userId",
     listAll
 );
 
-
 // ADD TABLE
 router.post("/table/create/:userId", 
     requireSignin, 
@@ -43,25 +42,22 @@ router.get("/table/:tableId/:userId",
     read
 );
 
-// UPDATE TABLE
-router.put(
-    "/table/:tableId/:userId",
+// UPDATE TABLE WAITER
+router.put("/table/:tableId/:userId",
+    requireSignin,
+    isAuth,
+    isWaiter,
+    updateWaiter
+);
+
+ // UPDATE TABLE ADMIN
+router.put("/table/update/:tableId/:userId",
     requireSignin,
     isAuth,
     isAdmin,
-    update
+    updateAdmin
 );
-
-// DELETE TABLE
-router.delete(
-    "/table/:tableId/:userId",
-    requireSignin,
-    isAuth,
-    isAdmin,
-    remove
-);
-
-
+ 
  
 // params
 router.param("tableId", tableById);

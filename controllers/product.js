@@ -166,17 +166,25 @@ exports.update = (req, res) => {
 
 exports.remove = (req, res) => {
     const product = req.product;
-    
-    product.remove((err, data) => {
-        if (err) {
-            return res.status(400).json({
-                error: errorHandler(err)
-            });
-        }
+
+    if(product.deleted){
         res.json({
-            message: "Product deleted"
+            message: "Product is already deleted"
         });
-    });
+    }else{
+        product.deleted = true;
+    
+        product.save((err, data) => {
+            if (err) {
+                return res.status(400).json({
+                    error: errorHandler(err)
+                });
+            }
+            res.json({
+                message: "Product deleted"
+            });
+        });   
+    } 
 };
 
 exports.photo = (req, res, next) => {
