@@ -3,7 +3,7 @@ const router = express.Router();
 
 // imports
 const { requireSignin, isAuth, isAdmin } = require("../controllers/auth");
-const { userById, read, update, list } = require("../controllers/user");
+const { userById, read, update, list, getRolesValues } = require("../controllers/user");
  
 // SECRET ACCESS
 router.get("/secret/:userId", requireSignin, isAuth, isAdmin, (req, res) => {
@@ -28,8 +28,20 @@ router.get("/user/:userId",
 );
 
 // UPDATE USER
-router.put("/user/:userId", requireSignin, isAuth, isAdmin, update); 
+router.put("/user/:userId", 
+    requireSignin, 
+    isAuth, 
+    isAdmin, 
+    update
+); 
  
+router.get("/users/roles/:userId", 
+    requireSignin, 
+    isAuth, 
+    isAdmin, 
+    getRolesValues
+);
+
 // params
 router.param("userId", userById);
 

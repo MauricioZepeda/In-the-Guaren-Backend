@@ -45,7 +45,9 @@ exports.getTable = (req, res, next) => {
 }
 
 exports.list = (req, res) => {
-    Table.find({ enabled: true, deleted: false }).exec((err, data) => {
+    const { area } = req.body
+
+    Table.find({ area, enabled: true, deleted: false }).exec((err, data) => {
         if (err) {
             return res.status(400).json({
                 error: errorHandler(err)
@@ -66,7 +68,6 @@ exports.listAll = (req, res) => {
             res.json(data);
         });
 };
-
  
 exports.create = (req, res) => {
     const table = new Table(req.body);
@@ -109,7 +110,6 @@ exports.updateWaiter = (req, res) => {
         }); 
 };
  
-
 exports.updateAdmin = (req, res) => {  
     Table.findOneAndUpdate(
         { _id: req.table._id },
@@ -130,4 +130,28 @@ exports.updateAdmin = (req, res) => {
 
             res.json(table);
         }); 
+};
+
+exports.getAreasValues = (req, res) => {
+    res.json(Table.schema.path("area").enumValues);
+};
+
+exports.openTable = (req, res) => {
+    const { table } = req;
+
+    if(table.status !== 'Closed'){
+        return res.status(404).json({
+            error: "A table can only be opened when it closed"
+        });
+    }
+
+    table.status = "Open";
+    table.save((err, data) => {
+        if (err) {
+            return res.status(400).json({
+                error: errorHandler(err)
+            });
+        }
+        res.json( { message: "Table opened successfully" });
+    });
 };

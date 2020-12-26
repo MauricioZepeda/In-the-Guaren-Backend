@@ -8,7 +8,9 @@ const {
     read,
     updateWaiter,
     updateAdmin,
-    listAll
+    listAll,
+    getAreasValues,
+    openTable
 } = require("../controllers/table");
 const { requireSignin, 
         isAuth, 
@@ -58,7 +60,16 @@ router.put("/table/update/:tableId/:userId",
     updateAdmin
 );
  
+router.get("/tables/areas", getAreasValues);
  
+router.put("/table/open/:tableId/:userId",
+    requireSignin,
+    isAuth,
+    isWaiter,
+    openTable
+);
+
+
 // params
 router.param("tableId", tableById);
 router.param("userId", userById);

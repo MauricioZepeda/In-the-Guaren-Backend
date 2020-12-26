@@ -126,7 +126,7 @@ exports.returnItem = (req, res) => {
     const { order, chair, item, profile } = req;
     const { item: itemId } = req.body;  
  
-    if(item.status === 'Ordered'){
+    if(item.status !== 'Ordered'){
         let item = chair.items.find(item => item._id == itemId); 
         item.status = 'Returned';
         order.save((err, data)=>{

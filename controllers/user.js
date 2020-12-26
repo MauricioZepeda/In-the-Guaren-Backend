@@ -68,3 +68,7 @@ exports.list = (req, res) => {
         res.json(data);
     });
 };
+
+exports.getRolesValues = (req, res) => {
+    res.json(User.schema.path("role").enumValues);
+};

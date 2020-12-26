@@ -4,9 +4,8 @@ const tableSchema = new mongoose.Schema(
     { 
         area: {
             type: String,
-            trim: true,
-            required: true,
-            maxlength: 20
+            default: "Saloon",
+            enum: ["Saloon", "Terrace", "Courtyard"] 
         },
         number: {
             type: Number,
