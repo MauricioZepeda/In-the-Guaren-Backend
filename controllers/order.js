@@ -59,6 +59,25 @@ exports.getOrder = (req, res, next) => {
     }); 
 };
 
+exports.getOrderByBill = (req, res, next) => {   
+    Order.findById(req.bill.order._id).exec((err, data) => {
+        if (err || !data) {
+            return res.status(404).json({
+                error: "Order not found"
+            });
+        }
+ 
+        if(data.closed){
+            return res.status(404).json({
+                error: "This order was pay before"
+            });
+        }
+
+        req.order = data;  
+        next();  
+    }); 
+};
+
 exports.confirmOrder = (req, res) => {
     const { order } = req; 
     

@@ -1,4 +1,5 @@
 const Bill = require("../models/bill"); 
+const Table = require("../models/table"); 
 const { errorHandler } = require("../helpers/dbErrorHandler");
  
 exports.billById = (req, res, next, id) => {
@@ -7,7 +8,7 @@ exports.billById = (req, res, next, id) => {
     .exec((err, bill) => { 
         if (err) {
             return res.status(400).json({
-                error: errorHandler(err)
+                error: errorHandler(err,'Bill')
             });
         }
 
@@ -27,6 +28,12 @@ exports.getBillDetailForChair = (req, res, next) => {
     
     const itemsOrdered = chair.items.filter(item => item.status === 'Ordered')
     
+    if(itemsOrdered.length === 0){
+        return res.status(400).json({
+            error: 'The chair has no items to pay'
+        });
+    }
+
     let total = 0;
     const chairsDetail = itemsOrdered.map(item => {
         total += item.price;
@@ -52,9 +59,17 @@ exports.getBillDetailForChair = (req, res, next) => {
 
 exports.getBillDetailForTable = (req, res, next) => {
     const { order } = req;
+      
+    const existChairsWithUnpayedItems = order.chairs.filter(chair => chair.items.some(item => item.status === 'Ordered'))  
+                                
+    if(existChairsWithUnpayedItems.length === 0){
+        return res.status(400).json({
+            error: 'The table has no items to pay'
+        }); 
+    }
+
+    const itemsOrdered = order.chairs.filter(chair => chair.items.filter(item => item.status === 'Ordered'))
      
-    const itemsOrdered = order.chairs.filter(chair => chair.items.filter(item=> item.status === 'Ordered'))
-    
     let total = 0;
     const detailItems = itemsOrdered.map(chair => { 
         const chairDetail = chair.items.map(item => {
@@ -88,7 +103,7 @@ exports.deletePreviousUnpayedBillForTable = (req, res, next) => {
                 return res.status(400).json({
                     error: errorHandler(err)
                 });
-            } 
+            }  
             next();  
         }); 
 }
@@ -102,8 +117,7 @@ exports.deletePreviousUnpayedBillForChair = (req, res, next) => {
                 });
             } 
             next();  
-        }); 
-    
+        });  
 }
 
 exports.read = (req, res) => {
@@ -180,4 +194,104 @@ exports.createForTable = (req, res) => {
  
 exports.getPayMethodsValues = (req, res) => {
     res.json(Bill.schema.path("payMethod").enumValues);
+};
+
+exports.payTableBill= (req, res) => {
+   const { bill, order, profile, body} = req;
+ 
+   if(bill.type === 'Chair'){
+       return res.status(404).json({error: "Bill must be Table type"})
+   }
+
+   bill.cashier = profile._id;
+   bill.payMethod = body.payMethod;
+   bill.tip = body.tip;
+   bill.status = 'Payed';
+
+   bill.save((err, dataBill)=>{
+       if(err){
+           return res.status(400).json({
+               error: errorHandler(err)
+           });
+       }  
+     
+       const chairs = order.chairs.map(chair =>{
+            const itemsPayed = chair.items.map(item => {
+                if(item.status === 'Ordered'){
+                    item.status = 'Payed';
+                    item.bill = dataBill._id;
+                } 
+            }) 
+       })
+       
+       const existChairsWithUnpayedItems = order.chairs.filter(chair => chair.items.some(item => item.status === 'Ordered'))  
+                               
+       if(existChairsWithUnpayedItems.length === 0){
+            order.closed = true;  
+ 
+            Table.findByIdAndUpdate(order.table._id, { status: 'Closed' })
+                .exec((err, tableData) => { 
+                    if (err || !tableData){ 
+                        return res.status(400).json({
+                            error: errorHandler(err)
+                        });
+                    }  
+            })
+        }
+      
+       order.save((err, dataOrder)=>{
+           if(err){
+               return res.status(400).json({
+                   error: errorHandler(err)
+               });
+           }  
+
+           res.json({message: `Table was pay successfully.`}); 
+       });  
+   });   
+};
+
+exports.payChairBill = (req, res) => {
+    const { bill, order, profile, body } = req; 
+
+    if(bill.type === 'Table'){
+        return res.status(404).json({error: "Bill must be Chair type"})
+    }
+ 
+    bill.cashier = profile._id;
+    bill.payMethod = body.payMethod;
+    bill.tip = body.tip;
+    bill.status = 'Payed';
+
+    bill.save((err, dataBill)=>{
+        if(err){
+            return res.status(400).json({
+                error: errorHandler(err)
+            });
+        }  
+      
+        const chairFound = order.chairs.find(chair => chair.number === bill.number)
+        const itemsPayed = chairFound.items.map(item => {
+            if(item.status === 'Ordered'){
+                item.status = 'Payed';
+                item.bill = dataBill._id;
+            } 
+        })
+     
+        const existChairsWithUnpayedItems = order.chairs.filter(chair => chair.items.some(item => item.status === 'Ordered'))  
+                                
+        if(existChairsWithUnpayedItems.length === 0){
+            order.closed = true; 
+        }
+       
+        order.save((err, dataOrder)=>{
+            if(err){
+                return res.status(400).json({
+                    error: errorHandler(err)
+                });
+            }  
+
+            res.json({message: `Chair was pay successfully.`}); 
+        });  
+    });  
 };

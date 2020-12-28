@@ -22,6 +22,10 @@ const itemSchema = new mongoose.Schema(
             type: ObjectId,
             ref: "User",
             required: true
+        },
+        bill: {
+            type: ObjectId,
+            ref: "Bill", 
         }
     },
     { timestamps: true }
