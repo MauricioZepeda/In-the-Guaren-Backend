@@ -68,8 +68,7 @@ router.put("/table/open/:tableId/:userId",
     isWaiter,
     openTable
 );
-
-
+ 
 // params
 router.param("tableId", tableById);
 router.param("userId", userById);

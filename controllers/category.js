@@ -35,7 +35,6 @@ exports.list = (req, res) => {
         });
 };
 
-
 exports.listAll = (req, res) => {
     Category.find()
         .exec((err, data) => {

@@ -4,6 +4,9 @@ const { errorHandler } = require("../helpers/dbErrorHandler");
 exports.orderById = (req, res, next, id) => { 
     Order
     .findById(id)
+    .populate('table')
+    .populate('chairs.items.product')
+    .populate('chairs.items.waiter')
     .exec((err, order) => { 
         if (err) { 
             return res.status(400).json({
@@ -74,7 +77,7 @@ exports.confirmOrder = (req, res) => {
             });
         }  
      
-        return  res.json(data); 
+        res.json({message: `Order confirmed successfully`});
     }); 
 };
 

@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');  
-const chairSchema = require('./chair');
+const chairSchema = require('./chair'); 
 const { ObjectId } = mongoose.Schema; 
 
 const orderSchema = new mongoose.Schema(
@@ -9,7 +9,7 @@ const orderSchema = new mongoose.Schema(
             ref: "Table",
             required: true
         },
-        chairs: [chairSchema],
+        chairs: [chairSchema], 
         closed: {
             type: Boolean,
             default: false
