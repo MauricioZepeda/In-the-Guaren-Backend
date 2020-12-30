@@ -4,6 +4,7 @@ const fs = require("fs");
 require("dotenv").config();
 
 const Product = require("../models/product");
+const Category = require("../models/category");
 const { errorHandler } = require("../helpers/dbErrorHandler");
  
 exports.productById = (req, res, next, id) => { 
@@ -71,47 +72,56 @@ exports.create = (req, res) => {
             });
         }
 
-        let product = new Product(fields);
+         Category.findById(category)
+            .exec((err, data)=>{
+                if(err || !data){
+                    return res.status(404).json({
+                        error: 'Category not found'
+                    })
+                }
 
-        // 1kb = 1000
-        // 1mb = 1000000
-        if (files.photo) {
-            if (files.photo.size > 1000000) {
-                return res.status(400).json({
-                    error: "Image should be less than 1mb in size"
-                });
-            }
-            product.photo.data = fs.readFileSync(files.photo.path);
-            product.photo.contentType = files.photo.type;
-        }
+                let product = new Product(fields);
 
-        product.save((err, result) => {
-            if (err) {
-                return res.status(400).json({
-                    error: errorHandler(err)
-                });
-            }
-            res.json(result);
-        });
+                // 1kb = 1000
+                // 1mb = 1000000
+                if (files.photo) {
+                    const size = Number(process.env.MAX_IMG_SIZE_MB) || 1;
+                    if (files.photo.size > size * 1000000) { // example: 1mb = (1 * 1000000) 
+                        return res.status(400).json({
+                            error: "Image should be less than 1mb in size"
+                        });
+                    }
+                    product.photo.data = fs.readFileSync(files.photo.path);
+                    product.photo.contentType = files.photo.type;
+                }
+
+                product.save((err, result) => {
+                    if (err) {
+                        return res.status(400).json({
+                            error: errorHandler(err)
+                        });
+                    }
+                    res.json(result);
+                }); 
+            }) 
     });
 };
 
-exports.list = (req, res) => { 
-   
+exports.list = (req, res) => {  
     Product.find({ 
-                category: req.category._id, 
-                enabled: true, 
-                deleted: false 
-            })
-            .select("-photo")
-            .exec((err, data) => {
-                if (err) {
-                    return res.status(400).json({
-                        error: errorHandler(err)
-                    });
-                }
-                res.json(data);
+        category: req.category._id, 
+        enabled: true, 
+        deleted: false 
+    })
+    .select("-photo")
+    .exec((err, data) => {
+        if (err) {
+            return res.status(400).json({
+                error: errorHandler(err)
             });
+        }
+        res.json(data);
+    });
 };
  
 exports.listAll = (req, res) => {
@@ -130,6 +140,7 @@ exports.listAll = (req, res) => {
 exports.read = (req, res) =>  res.json(req.product);
  
 exports.update = (req, res) => { 
+    const { product } = req; 
     let form = new formidable.IncomingForm();
     form.keepExtensions = true;
     form.parse(req, (err, fields, files) => {
@@ -139,29 +150,38 @@ exports.update = (req, res) => {
             });
         }
 
-        let product = req.product;
-        product = _.extend(product, fields);
- 
-        if (files.photo) {
-            const size = Number(process.env.MAX_IMG_SIZE_MB) || 1;
-            if (files.photo.size > 1000000 * size) { // example: 3mb = (1000000  * 3)
-                return res.status(400).json({
-                    error: `Image should be less than ${size}mb in size` 
-                });
-            }
-            product.photo.data = fs.readFileSync(files.photo.path);
-            product.photo.contentType = files.photo.type;
-        } 
-    
-        product.save((err, data) => {
-            if (err) {
-                return res.status(400).json({
-                    error: errorHandler(err)
-                });
-            }
-            res.json(data);
-        }); 
-    }); 
+        const category = fields.category ? fields.category : product.category; 
+        Category.findById(category)
+            .exec((err, data)=>{
+                if(err || !data){
+                    return res.status(404).json({
+                        error: 'Category not found'
+                    })
+                }  
+                    let product = req.product;
+                    product = _.extend(product, fields);
+            
+                    if (files.photo) {
+                        const size = Number(process.env.MAX_IMG_SIZE_MB) || 1;
+                        if (files.photo.size > size * 100000) { // example: 1mb = (1 * 1000000) 
+                            return res.status(400).json({
+                                error: `Image should be less than ${size}mb in size` 
+                            });
+                        }
+                        product.photo.data = fs.readFileSync(files.photo.path);
+                        product.photo.contentType = files.photo.type;
+                    } 
+                
+                    product.save((err, data) => {
+                        if (err) {
+                            return res.status(400).json({
+                                error: errorHandler(err)
+                            });
+                        }
+                        res.json(data);
+                    }); 
+                });  
+        }) 
 };
 
 exports.remove = (req, res) => {
@@ -193,4 +213,4 @@ exports.photo = (req, res, next) => {
         return res.send(req.product.photo.data);
     }
     next();
-};
+}; 

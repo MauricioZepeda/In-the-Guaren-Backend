@@ -21,8 +21,7 @@ exports.categoryById = (req, res, next, id) => {
         next();
     });
 };
-
-
+ 
 exports.list = (req, res) => {
     Category.find({ enabled: true, deleted: false })
         .exec((err, data) => {
@@ -88,5 +87,4 @@ exports.remove = (req, res) => {
             message: "Category deleted"
         });
     });
-};
-
+}; 

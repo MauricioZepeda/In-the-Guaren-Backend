@@ -1,15 +1,28 @@
 const express = require("express");
 const router = express.Router();
  
-const { requireSignin, isAuth, isWaiter, isCashier } = require("../controllers/auth")
-const { billById, read, list, listAll, getPayMethodsValues,
-        createForOneChair, getBillDetailForChair, 
-        createForTable, getBillDetailForTable, 
-        deletePreviousUnpayedBillForTable, deletePreviousUnpayedBillForChair,
-        payTableBill, payChairBill } = require("../controllers/bill");
+const { requireSignin, 
+        isAuth, 
+        isWaiter, 
+        isCashier } = require("../controllers/auth")
+const { billById, 
+        read, 
+        list, 
+        listAll, 
+        getPayMethodsValues,
+        createForOneChair, 
+        getBillDetailForChair, 
+        createForTable, 
+        getBillDetailForTable, 
+        deletePreviousUnpayedBillForTable, 
+        deletePreviousUnpayedBillForChair,
+        payTableBill, 
+        payChairBill } = require("../controllers/bill");
+const { orderById, 
+       getOrderByBill } = require("../controllers/order");
 const { userById } = require("../controllers/user");
-const { orderById, getOrderByBill } = require("../controllers/order");
 const { getChair } = require("../controllers/chair");
+const { payBillValidator } = require("../validators/bill");
 
 router.get("/bills/paymethods/:userId", 
     requireSignin, 
@@ -67,7 +80,8 @@ router.get("/bill/:billId",
 router.put("/bill/table/:billId/:userId", 
     requireSignin, 
     isAuth, 
-    isCashier,  
+    isCashier, 
+    payBillValidator, 
     getOrderByBill,
     payTableBill
 );
@@ -77,11 +91,11 @@ router.put("/bill/chair/:billId/:userId",
     requireSignin, 
     isAuth, 
     isCashier,
+    payBillValidator,
     getOrderByBill,  
     payChairBill
 );
- 
-
+  
 // params
 router.param("billId", billById);
 router.param("orderId", orderById);

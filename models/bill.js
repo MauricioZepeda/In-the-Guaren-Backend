@@ -10,6 +10,7 @@ const billSchema = new mongoose.Schema(
         },
         number: {
             type: Number,
+            require: true,
             trim: true 
         }, 
         order: {
@@ -25,7 +26,7 @@ const billSchema = new mongoose.Schema(
             trim: true 
         }, 
         tip: {
-            type: Number,
+            type: Number, 
             trim: true
         }, 
         payMethod: {

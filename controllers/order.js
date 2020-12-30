@@ -132,8 +132,7 @@ exports.listAll = (req, res) => {
         res.json(data);
     });
 };
- 
- 
+  
 exports.remove = (req, res) => {
     const { order, table } = req;  
     
@@ -161,5 +160,4 @@ exports.remove = (req, res) => {
             res.json({message: `Order deleted successfully`});
         });
     } 
-};
-
+}; 

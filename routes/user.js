@@ -2,15 +2,27 @@ const express = require("express");
 const router = express.Router();
 
 // imports
-const { requireSignin, isAuth, isAdmin } = require("../controllers/auth");
-const { userById, read, update, list, getRolesValues } = require("../controllers/user");
- 
+const { requireSignin, 
+        isAuth, 
+        isAdmin } = require("../controllers/auth");
+const { userById, 
+        read, 
+        update, 
+        list, 
+        getRolesValues } = require("../controllers/user");
+const { updateuserValidator} = require("../validators/auth");
+
 // SECRET ACCESS
-router.get("/secret/:userId", requireSignin, isAuth, isAdmin, (req, res) => {
-    res.json({
-        user: req.profile
-    });
-});
+router.get("/secret/:userId", 
+    requireSignin, 
+    isAuth, 
+    isAdmin, 
+    (req, res) => {
+        res.json({
+            user: req.profile
+        });
+    }
+);
 
 router.get("/users/:userId",    
     requireSignin, 
@@ -32,6 +44,7 @@ router.put("/user/:userId",
     requireSignin, 
     isAuth, 
     isAdmin, 
+    updateuserValidator,
     update
 ); 
  

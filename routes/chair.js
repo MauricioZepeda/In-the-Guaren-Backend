@@ -1,12 +1,24 @@
 const express = require("express");
 const router = express.Router();
  
-const { requireSignin, isAuth, isWaiter } = require("../controllers/auth"); 
+const { requireSignin, 
+        isAuth, 
+        isWaiter } = require("../controllers/auth"); 
 const { userById } = require("../controllers/user"); 
 const { getProduct } = require("../controllers/product");    
-const { getOrder, orderById }= require("../controllers/order");  
-const { tableById, getTable } = require("../controllers/table");  
-const { getChair, getItem, listChairs, readChair, removeChair, addItem, removeItem, returnItem } = require('../controllers/chair'); 
+const { getOrder, 
+        orderById } = require("../controllers/order");  
+const { tableById, 
+        getTable } = require("../controllers/table");  
+const { getChair, 
+        getItem, 
+        listChairs, 
+        readChair, 
+        removeChair, 
+        addItem, 
+        removeItem, 
+        returnItem } = require('../controllers/chair'); 
+const { addItemValidator } = require('../validators/item');
 
 router.get("/chairs/:orderId/:userId",
     requireSignin, 
@@ -36,6 +48,7 @@ router.post("/chair/addItem/:tableId/:userId",
     requireSignin, 
     isAuth,
     isWaiter,
+    addItemValidator,
     getOrder,
     getProduct, 
     addItem 

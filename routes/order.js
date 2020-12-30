@@ -1,9 +1,17 @@
 const express = require("express");
 const router = express.Router();
 
-const { orderById, read, remove, confirmOrder, listOpen, listClosed, listAll } = require('../controllers/order');
+const { orderById, 
+        read,
+        remove, 
+        confirmOrder, 
+        listOpen, 
+        listClosed, 
+        listAll } = require('../controllers/order');
 const { getTable } = require("../controllers/table");  
-const { requireSignin, isAuth, isWaiter } = require("../controllers/auth"); 
+const { requireSignin, 
+        isAuth, 
+        isWaiter } = require("../controllers/auth"); 
 const { userById } = require("../controllers/user");  
   
 router.get("/order/:orderId/:userId", 

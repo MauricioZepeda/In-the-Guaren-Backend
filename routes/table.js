@@ -1,25 +1,27 @@
 const express = require("express");
 const router = express.Router();
 
-const {
-    tableById,
-    list,
-    create,
-    read,
-    updateWaiter,
-    updateAdmin,
-    listAll,
-    getAreasValues,
-    openTable
-} = require("../controllers/table");
+const { tableById,
+        list,
+        create,
+        read,
+        updateWaiter,
+        updateAdmin,
+        listAll,
+        getAreasValues,
+        openTable } = require("../controllers/table");
 const { requireSignin, 
         isAuth, 
         isAdmin, 
         isWaiter } = require("../controllers/auth"); 
 const { userById } = require("../controllers/user");
- 
+const { addTableValidator, 
+        updateTableAdminValidator,
+        updateTableWaiterValidator,
+        listTablesByAreaValidator } = require("../validators/table");
+
 // LIST TABLES
-router.get("/tables", list);
+router.get("/tables", listTablesByAreaValidator, list);
  
 router.get("/tables/all/:userId", 
     requireSignin, 
@@ -33,6 +35,7 @@ router.post("/table/create/:userId",
     requireSignin, 
     isAuth, 
     isAdmin, 
+    addTableValidator,
     create
 );
 
@@ -49,6 +52,7 @@ router.put("/table/:tableId/:userId",
     requireSignin,
     isAuth,
     isWaiter,
+    updateTableWaiterValidator,
     updateWaiter
 );
 
@@ -57,6 +61,7 @@ router.put("/table/update/:tableId/:userId",
     requireSignin,
     isAuth,
     isAdmin,
+    updateTableAdminValidator,
     updateAdmin
 );
  

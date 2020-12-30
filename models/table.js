@@ -4,8 +4,9 @@ const tableSchema = new mongoose.Schema(
     { 
         area: {
             type: String,
-            default: "Saloon",
-            enum: ["Saloon", "Terrace", "Courtyard"] 
+            default: "Saloon", 
+            enum: ["Saloon", "Terrace", "Courtyard"],  
+            required: true
         },
         number: {
             type: Number,
@@ -22,8 +23,9 @@ const tableSchema = new mongoose.Schema(
         status: {
             type: String,
             default: "Open",
-            enum: ["Open", "Busy", "Closed"]  
-        }, 
+            enum: ["Open", "Busy", "Closed"],
+            required: true 
+        },  
         enabled: {
             type: Boolean,
             default: true
@@ -36,4 +38,4 @@ const tableSchema = new mongoose.Schema(
     { timestamps: true }
 );
 
-module.exports = mongoose.model("Table", tableSchema);
+module.exports = mongoose.model("Table", tableSchema); 

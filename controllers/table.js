@@ -42,7 +42,7 @@ exports.getTable = (req, res, next) => {
         req.table = data;
         next();
     });
-}
+};
 
 exports.list = (req, res) => {
     const { area } = req.body
@@ -87,7 +87,7 @@ exports.read = (req, res) => {
 
 exports.updateWaiter = (req, res) => {
     const { table, body } = req;   
-    const updateTable = _.omit(body, 'deleted', 'enabled'); 
+    const updateTable = _.omit(body, 'deleted', 'enabled', 'status'); 
 
     Table.findOneAndUpdate(
         { _id: table._id },

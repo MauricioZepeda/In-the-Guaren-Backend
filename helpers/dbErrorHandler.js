@@ -23,24 +23,31 @@ const uniqueMessage = error => {
 };
 
 /**
- * Get the erroror message from error object
+ * Get the error message from error object
  */
 exports.errorHandler = (error, model='') => {
-    let message = "";
-
+    let message = ""; 
     if (error.code) {
         switch (error.code) {
             case 11000:
             case 11001:
-                message = uniqueMessage(error);
+                const errorMessage = uniqueMessage(error).split(':')[2].trim(); 
+                message = errorMessage.charAt(0).toUpperCase() + errorMessage.substr(1).toLowerCase();   
                 break;
             default:
                 message = "Something went wrong";
+        } 
+    } else {
+        if(error.kind === 'ObjectId'){
+             message = `Something went wrong${ (model ? ` with ${model} id` : '') }`;
+        }else{
+            const errorDetail =  Object.values(error.errors)[0].properties;   
+            if(errorDetail.type === 'enum' || errorDetail.type === 'required'){
+                message = errorDetail.message 
+            }else{
+                message = 'Something went wrong!'; 
+            } 
         }
-        return message;
-    } else { 
-        return `Something went wrong${ (model ? ` with ${model} id` : '') }` 
     }
-
-    
+    return message;
 };

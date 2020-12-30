@@ -16,18 +16,6 @@ exports.userById = (req, res, next, id) => {
                 error: "User not found"
             });
         }
-
-        if (!user.enabled) {
-            return res.status(404).json({
-                error: "User disabled"
-            });
-        }
-
-        if (user.deleted) {
-            return res.status(404).json({
-                error: "User was deleted"
-            });
-        }
  
         req.profile = user;
         next();

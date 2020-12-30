@@ -2,9 +2,19 @@ const express = require("express");
 const router = express.Router();
 
 // imports
-const { categoryById, list, listAll, create, read, update, remove } = require("../controllers/category");
-const { requireSignin, isAuth, isAdmin } = require("../controllers/auth");
+const { categoryById, 
+        list, 
+        listAll, 
+        create, 
+        read, 
+        update, 
+        remove } = require("../controllers/category");
+const { requireSignin, 
+        isAuth, 
+        isAdmin } = require("../controllers/auth");
 const { userById } = require("../controllers/user");
+const { addCategoryValidator,  
+        updateCategoryValidator} = require("../validators/category");
  
 // LIST CATEGORIES
 router.get("/categories", list);
@@ -21,6 +31,7 @@ router.post("/category/create/:userId",
     requireSignin, 
     isAuth, 
     isAdmin, 
+    addCategoryValidator,
     create
 );
 
@@ -33,6 +44,7 @@ router.put(
     requireSignin,
     isAuth,
     isAdmin,
+    updateCategoryValidator,
     update
 );
 
