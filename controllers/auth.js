@@ -26,13 +26,13 @@ exports.signin = (req, res) => {
     }, (err, user) => {
         if (err || !user) {
             return res
-                .status(200)
+                .status(404)
                 .json({error: "User with that email does not exist. Please signup"});
         }
 
         if (!user.authenticate(password)) {
             return res
-                .status(200)
+                .status(404)
                 .json({error: "E-mail and password do not match"});
         }
 
@@ -72,7 +72,7 @@ exports.isAuth = (req, res, next) => {
     
     if (!user) {
         return res
-            .status(401)
+            .status(203)
             .json({error: "Access denied..."});
     } 
     next();

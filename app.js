@@ -54,17 +54,26 @@ const swaggerOptions = {
         info: {
             version: '1.0.0',
             title: 'In the guaren - API',
-            description: "API for manage orders, payments and administration of the restaurant.",
+            description: "API to manage orders by chair and table of the mythical restaurant 'In the Guaren' of the 'Jappening con Ja' show. <br />It can handle the orders placed by a table dividing the orders individually for each chair. You can ask for the bill to complete table as for each chair, without problems associated with separating accounts.",
             contact: {
                 name: "Mauricio Zepeda Rivera"
-            }, 
+            },  
             servers: [
                 {
                   url: `http://localhost:${port}`,
                   description: "Backend server"
                 } 
-            ]
-        }
+            ],
+            components: {        
+                securitySchemes: {
+                  bearerAuth: {
+                    type: "http",
+                    scheme: "bearer",
+                    bearerFormat: "JWT"
+                  }
+                }
+            }
+        } 
     },
     //definition the apis with swagger
     apis: ['./routes/*.js']

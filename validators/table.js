@@ -77,7 +77,7 @@ const validateDeleted = req => (
         .optional()
         .trim()  
         .isBoolean() 
-        .withMessage('Enabled must be a boolean true or false') 
+        .withMessage('Deleted must be a boolean true or false') 
 );
  
 const sendError = (errors, res) => {

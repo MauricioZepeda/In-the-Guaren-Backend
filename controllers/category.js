@@ -63,8 +63,12 @@ exports.read = (req, res) => {
 };
 
 exports.update = (req, res) => {
+    const { name, enabled, deleted } = req.body
     const category = req.category;
-    category.name = req.body.name;
+    category.name = name;
+    if(enabled !== undefined) category.enabled = enabled;
+    if(deleted !== undefined) category.deleted = deleted; 
+    
     category.save((err, data) => {
         if (err) {
             return res.status(400).json({
@@ -77,7 +81,8 @@ exports.update = (req, res) => {
 
 exports.remove = (req, res) => {
     const category = req.category;
-    category.remove((err, data) => {
+    category.deleted = true;
+    category.save((err, data) => {
         if (err) {
             return res.status(400).json({
                 error: errorHandler(err)
