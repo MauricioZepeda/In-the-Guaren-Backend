@@ -1,0 +1,1856 @@
+{
+	"info": {
+		"_postman_id": "889ca520-fe7f-4028-adb9-e88a93271141",
+		"name": "In the Guaren - Backend",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Auth",
+			"item": [
+				{
+					"name": "SIGNUP",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {}
+					},
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "name",
+									"value": "Test user",
+									"type": "text"
+								},
+								{
+									"key": "email",
+									"value": "test@intheguaren.cl",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "test2020",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{baseURL}}/api/signup",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"api",
+								"signup"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "SIGNIN",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"let res = pm.response.json();\r",
+									"\r",
+									"if(res.token){\r",
+									"    pm.environment.set('token', 'Bearer ' + res.token);\r",
+									"    pm.environment.set('userId', res.user._id);\r",
+									"}"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "",
+								"value": "",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "email",
+									"value": "test@intheguaren.cl",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "test2020",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{baseURL}}/api/signin",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"api",
+								"signin"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "SIGNOUT",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/api/signout",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"api",
+								"signout"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "Table",
+			"item": [
+				{
+					"name": "LIST TABLES BY AREA",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "area",
+									"value": "Terrace",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{baseURL}}/api/tables",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"api",
+								"tables"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "LIST ALL TABLES",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": []
+						},
+						"url": {
+							"raw": "{{baseURL}}/api/tables/all/{{userId}}",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"api",
+								"tables",
+								"all",
+								"{{userId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "ADD TABLE",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "{{token}}"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "area",
+									"value": "Saloon",
+									"type": "text"
+								},
+								{
+									"key": "number",
+									"value": "1",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{baseURL}}/api/table/create/{{userId}}",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"api",
+								"table",
+								"create",
+								"{{userId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "READ  TABLE",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [],
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}/api/table/5fd24720557f0054d05bebb4/{{userId}}",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"api",
+								"table",
+								"5fd24720557f0054d05bebb4",
+								"{{userId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "UPDATE TABLE WAITER",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "{{token}}"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "number",
+									"value": "1",
+									"type": "text"
+								},
+								{
+									"key": "area",
+									"value": "Saloon ",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{baseURL}}/api/table/5feaad8ddd3b4041e451ac7a/{{userId}}",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"api",
+								"table",
+								"5feaad8ddd3b4041e451ac7a",
+								"{{userId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "UPDATE TABLE ADMIN",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "{{token}}"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "deleted",
+									"value": "false",
+									"type": "text"
+								},
+								{
+									"key": "enabled",
+									"value": "false ",
+									"type": "text"
+								},
+								{
+									"key": "status",
+									"value": "Open ",
+									"type": "text"
+								},
+								{
+									"key": "area",
+									"value": "Terrace ",
+									"type": "text"
+								},
+								{
+									"key": "number",
+									"value": "2 ",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{baseURL}}/api/table/update/5feaad8ddd3b4041e451ac7a/{{userId}}",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"api",
+								"table",
+								"update",
+								"5feaad8ddd3b4041e451ac7a",
+								"{{userId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET TABLES AREAS",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": []
+						},
+						"url": {
+							"raw": "{{baseURL}}/api/tables/areas",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"api",
+								"tables",
+								"areas"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "OPEN TABLE",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "{{token}}"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": []
+						},
+						"url": {
+							"raw": "{{baseURL}}/api/table/open/5feaad8ddd3b4041e451ac7a/{{userId}}",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"api",
+								"table",
+								"open",
+								"5feaad8ddd3b4041e451ac7a",
+								"{{userId}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "User",
+			"item": [
+				{
+					"name": "READ USER",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [],
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}/api/user/{{userId}}",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"api",
+								"user",
+								"{{userId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "UPDATE USER",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "role",
+									"value": "ADMIN",
+									"type": "text"
+								},
+								{
+									"key": "deleted",
+									"value": "false",
+									"type": "text"
+								},
+								{
+									"key": "name",
+									"value": "Admin user",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "Admin1313",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{baseURL}}/api/user/{{userId}}",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"api",
+								"user",
+								"{{userId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "LIST USERS",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "{{token}}"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": []
+						},
+						"url": {
+							"raw": "{{baseURL}}/api/users/{{userId}}",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"api",
+								"users",
+								"{{userId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET USERS ROLES",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "{{token}}"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": []
+						},
+						"url": {
+							"raw": "{{baseURL}}/api/users/roles/{{userId}}",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"api",
+								"users",
+								"roles",
+								"{{userId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "SECRET ACCESS",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{baseURL}}/api/secret/{{userId}}",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"api",
+								"secret",
+								"{{userId}}"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "Category",
+			"item": [
+				{
+					"name": "LIST CATEGORIES",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseURL}}/api/categories",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"api",
+								"categories"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "LIST ALL CATEGORIES",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": []
+						},
+						"url": {
+							"raw": "{{baseURL}}/api/categories/all/{{userId}}",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"api",
+								"categories",
+								"all",
+								"{{userId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "ADD CATEGORY",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "name",
+									"value": "Beers",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{baseURL}}/api/category/create/{{userId}}",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"api",
+								"category",
+								"create",
+								"{{userId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "READ  CATEGORY",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseURL}}/api/category/5fd39381164c8c7d5cb15db3",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"api",
+								"category",
+								"5fd39381164c8c7d5cb15db3"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "UPDATE CATEGORY",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "{{token}}"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "name",
+									"value": "Desserts",
+									"type": "text"
+								},
+								{
+									"key": "enabled",
+									"value": "true",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{baseURL}}/api/category/5febfff52d4dcf48183fbbbe/{{userId}}",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"api",
+								"category",
+								"5febfff52d4dcf48183fbbbe",
+								"{{userId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "DELETE CATEGORY",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": []
+						},
+						"url": {
+							"raw": "{{baseURL}}/api/category/5fd393ef164c8c7d5cb15db8/{{userId}}",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"api",
+								"category",
+								"5fd393ef164c8c7d5cb15db8",
+								"{{userId}}"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "Product",
+			"item": [
+				{
+					"name": "LIST PRODUCTS",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "formdata",
+							"formdata": []
+						},
+						"url": {
+							"raw": "{{baseURL}}/api/products/5fe3a277bbbc193f90135f8a",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"api",
+								"products",
+								"5fe3a277bbbc193f90135f8a"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "LIST  ALL PRODUCTS",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": []
+						},
+						"url": {
+							"raw": "{{baseURL}}/api/products/all/5fe3a277bbbc193f90135f8a/{{userId}}",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"api",
+								"products",
+								"all",
+								"5fe3a277bbbc193f90135f8a",
+								"{{userId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "ADD PRODUCT",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "{{token}}"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "name",
+									"value": "Schop Kunstmann",
+									"type": "text"
+								},
+								{
+									"key": "description",
+									"value": "Schop chico de 250cc",
+									"type": "text"
+								},
+								{
+									"key": "price",
+									"value": "990",
+									"type": "text"
+								},
+								{
+									"key": "photo",
+									"type": "file",
+									"src": "/C:/Users/mzepedar/Downloads/AUS_PASA131313 (1).JPG"
+								},
+								{
+									"key": "category",
+									"value": "5fd50db19ad89f4ae072d881",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{baseURL}}/api/product/create/{{userId}}",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"api",
+								"product",
+								"create",
+								"{{userId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "READ PRODUCT",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": []
+						},
+						"url": {
+							"raw": "{{baseURL}}/api/product/5fec05844074612138b40f24",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"api",
+								"product",
+								"5fec05844074612138b40f24"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "UPDATE PRODUCT",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "{{token}}"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "name",
+									"value": "Schop Torobayo",
+									"type": "text"
+								},
+								{
+									"key": "description",
+									"value": "Schop de medio litro",
+									"type": "text"
+								},
+								{
+									"key": "price",
+									"value": "2900",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{baseURL}}/api/product/5fe4deccf7674d19449bd9d9/{{userId}}",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"api",
+								"product",
+								"5fe4deccf7674d19449bd9d9",
+								"{{userId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "DELETE PRODUCT",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "{{token}}"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": []
+						},
+						"url": {
+							"raw": "{{baseURL}}/api/product/5fe4deccf7674d19449bd9d9/{{userId}}",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"api",
+								"product",
+								"5fe4deccf7674d19449bd9d9",
+								"{{userId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET PRODUCT PHOTO",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": []
+						},
+						"url": {
+							"raw": "{{baseURL}}/api/product/photo/5fd5120399d0cf05d487ed20",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"api",
+								"product",
+								"photo",
+								"5fd5120399d0cf05d487ed20"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "Chair",
+			"item": [
+				{
+					"name": "Items",
+					"item": [
+						{
+							"name": "ADD ITEM",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"type": "text",
+										"value": "{{token}}"
+									}
+								],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "number",
+											"value": "4 ",
+											"type": "text"
+										},
+										{
+											"key": "product",
+											"value": "5fe4e2d58a86da30c855d9ab",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{baseURL}}/api/chair/addItem/5feaad8ddd3b4041e451ac7a/{{userId}}",
+									"host": [
+										"{{baseURL}}"
+									],
+									"path": [
+										"api",
+										"chair",
+										"addItem",
+										"5feaad8ddd3b4041e451ac7a",
+										"{{userId}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "DELETE ITEM",
+							"request": {
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "Authorization",
+										"type": "text",
+										"value": "{{token}}"
+									}
+								],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "chair",
+											"value": "5fdcc72cd0f4728f38a24da8",
+											"type": "text"
+										},
+										{
+											"key": "item",
+											"value": "5fdccaee41930a36543b3c10",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{baseURL}}/api/chair/removeItem/5fe4e2b18a86da30c855d9aa/{{userId}}",
+									"host": [
+										"{{baseURL}}"
+									],
+									"path": [
+										"api",
+										"chair",
+										"removeItem",
+										"5fe4e2b18a86da30c855d9aa",
+										"{{userId}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "RETURN ITEM",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "{{token}}",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "urlencoded",
+									"urlencoded": [
+										{
+											"key": "chair",
+											"value": "5fe4cbb3d3f92822dcdcf976",
+											"type": "text"
+										},
+										{
+											"key": "item",
+											"value": "5fe4cbb3d3f92822dcdcf977",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "{{baseURL}}/api/chair/returnItem/5fe4cba4d3f92822dcdcf973/{{userId}}",
+									"host": [
+										"{{baseURL}}"
+									],
+									"path": [
+										"api",
+										"chair",
+										"returnItem",
+										"5fe4cba4d3f92822dcdcf973",
+										"{{userId}}"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "LIST CHAIRS",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": []
+						},
+						"url": {
+							"raw": "{{baseURL}}/api/chairs/5fe4e2298a86da30c855d9a5/{{userId}}",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"api",
+								"chairs",
+								"5fe4e2298a86da30c855d9a5",
+								"{{userId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "READ  CHAIR",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "chair",
+									"value": "5fe4e2f28a86da30c855d9ac",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{baseURL}}/api/chair/5fe4e2b18a86da30c855d9aa/{{userId}}",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"api",
+								"chair",
+								"5fe4e2b18a86da30c855d9aa",
+								"{{userId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "DELETE CHAIR",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "{{token}}"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "chair",
+									"value": "5fe3e4409b20c840b8a33750",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{baseURL}}/api/chair/remove/5fe3ad4947540f052c2e89e8/{{userId}}",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"api",
+								"chair",
+								"remove",
+								"5fe3ad4947540f052c2e89e8",
+								"{{userId}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Order",
+			"item": [
+				{
+					"name": "CONFIRM ORDER",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": []
+						},
+						"url": {
+							"raw": "{{baseURL}}/api/order/confirm/5fe4e2b18a86da30c855d9aa/{{userId}}",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"api",
+								"order",
+								"confirm",
+								"5fe4e2b18a86da30c855d9aa",
+								"{{userId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "READ ORDER",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": []
+						},
+						"url": {
+							"raw": "{{baseURL}}/api/order/5fe4c5e847bae44420ad6aa2/{{userId}}",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"api",
+								"order",
+								"5fe4c5e847bae44420ad6aa2",
+								"{{userId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "DELETE ORDER",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": []
+						},
+						"url": {
+							"raw": "{{baseURL}}/api/order/5fe4e2298a86da30c855d9a5/{{userId}}",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"api",
+								"order",
+								"5fe4e2298a86da30c855d9a5",
+								"{{userId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "LIST OPEN ORDERS",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": []
+						},
+						"url": {
+							"raw": "{{baseURL}}/api/orders/{{userId}}",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"api",
+								"orders",
+								"{{userId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "LIST CLOSED ORDERS",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "{{token}}"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": []
+						},
+						"url": {
+							"raw": "{{baseURL}}/api/orders/closed/{{userId}}",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"api",
+								"orders",
+								"closed",
+								"{{userId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "LIST ALL ORDERS",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "{{token}}"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": []
+						},
+						"url": {
+							"raw": "{{baseURL}}/api/orders/all/{{userId}}",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"api",
+								"orders",
+								"all",
+								"{{userId}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Bill",
+			"item": [
+				{
+					"name": "LIST UNPAYED BILLS",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": []
+						},
+						"url": {
+							"raw": "{{baseURL}}/api/bills/{{userId}}",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"api",
+								"bills",
+								"{{userId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "CREATE BILL FOR ONE CHAIR",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "{{token}}"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "chair",
+									"value": "5fe4e81c8a86da30c855d9b5",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{baseURL}}/api/bill/chair/5fe4e2b18a86da30c855d9aa/{{userId}}",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"api",
+								"bill",
+								"chair",
+								"5fe4e2b18a86da30c855d9aa",
+								"{{userId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "CREATE BILL FOR TABLE",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "{{token}}"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": []
+						},
+						"url": {
+							"raw": "{{baseURL}}/api/bill/table/5fe4e2b18a86da30c855d9aa/{{userId}}",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"api",
+								"bill",
+								"table",
+								"5fe4e2b18a86da30c855d9aa",
+								"{{userId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GET PAY METHODS",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": []
+						},
+						"url": {
+							"raw": "{{baseURL}}/api/bills/paymethods/{{userId}}",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"api",
+								"bills",
+								"paymethods",
+								"{{userId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "PAY TABLE BILL",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "payMethod",
+									"value": "Credit",
+									"type": "text"
+								},
+								{
+									"key": "tip",
+									"value": "2000f",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{baseURL}}/api/bill/table/5fec96114ccc8943a8556947/{{userId}}",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"api",
+								"bill",
+								"table",
+								"5fec96114ccc8943a8556947",
+								"{{userId}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "PAY CHAIR BILL",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "{{token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "payMethod",
+									"value": "Cash",
+									"type": "text"
+								},
+								{
+									"key": "tip",
+									"value": "166",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{baseURL}}/api/bill/chair/5fe9e5addf394b05e8172869/{{userId}}",
+							"host": [
+								"{{baseURL}}"
+							],
+							"path": [
+								"api",
+								"bill",
+								"chair",
+								"5fe9e5addf394b05e8172869",
+								"{{userId}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	]
+}

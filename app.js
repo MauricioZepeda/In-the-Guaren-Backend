@@ -56,7 +56,8 @@ const swaggerOptions = {
             title: 'In the guaren - API',
             description: "API to manage orders by chair and table of the mythical restaurant 'In the Guaren' of the 'Jappening con Ja' show. <br />It can handle the orders placed by a table dividing the orders individually for each chair. You can ask for the bill to complete table as for each chair, without problems associated with separating accounts.",
             contact: {
-                name: "Mauricio Zepeda Rivera"
+                name: "Mauricio Zepeda Rivera",
+                email: "mauro.zepeda.rivera@gmail.com"
             },  
             servers: [
                 {
