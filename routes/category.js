@@ -62,6 +62,8 @@ router.get("/categories", list);
  *        description: Access denied         
  *      "400":
  *        description: A bad request response
+ *      "404":
+ *        description: An error according to the data provided                
  */
 router.get("/categories/all/:userId", 
     requireSignin, 
@@ -108,6 +110,8 @@ router.get("/categories/all/:userId",
  *        description: Access denied            
  *      "400":
  *        description: A bad request response 
+ *      "404":
+ *        description: An error according to the data provided                
  */
 router.post("/category/create/:userId", 
     requireSignin, 
@@ -137,6 +141,8 @@ router.post("/category/create/:userId",
  *        description: A sucessful response          
  *      "400":
  *        description: A bad request response
+ *      "404":
+ *        description: An error according to the data provided  
  */
 router.get("/category/:categoryId", read);
  
@@ -184,6 +190,8 @@ router.get("/category/:categoryId", read);
  *        description: Access denied            
  *      "400":
  *        description: A bad request response 
+ *      "404":
+ *        description: An error according to the data provided  
  */
 router.put("/category/:categoryId/:userId",
     requireSignin,
@@ -223,9 +231,10 @@ router.put("/category/:categoryId/:userId",
  *        description: Access denied            
  *      "400":
  *        description: A bad request response 
+ *      "404":
+ *        description: An error according to the data provided  
  */
-router.delete(
-    "/category/:categoryId/:userId",
+router.delete("/category/:categoryId/:userId",
     requireSignin,
     isAuth,
     isAdmin,

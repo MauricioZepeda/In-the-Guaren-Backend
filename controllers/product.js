@@ -188,7 +188,7 @@ exports.remove = (req, res) => {
     const product = req.product;
 
     if(product.deleted){
-        res.json({
+        res.status(404).json({
             message: "Product is already deleted"
         });
     }else{

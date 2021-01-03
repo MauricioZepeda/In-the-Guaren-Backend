@@ -68,7 +68,7 @@ router.get("/tables",
  *           required: true
  *        description: ID of the user's get the request
  *    tags:
- *      - Category
+ *      - Table
  *    summary: Get all tables (enabled and deleted)
  *    description: Use to all tables, is used only for ADMIN role
  *    responses:
@@ -78,6 +78,8 @@ router.get("/tables",
  *        description: Access denied         
  *      "400":
  *        description: A bad request response
+ *      "404":
+ *        description: An error according to the data provided                
  */
 router.get("/tables/all/:userId", 
     requireSignin, 
@@ -127,6 +129,8 @@ router.get("/tables/all/:userId",
  *        description: Access denied            
  *      "400":
  *        description: A bad request response 
+ *      "404":
+ *        description: An error according to the data provided                
  */
 router.post("/table/create/:userId", 
     requireSignin, 
@@ -136,15 +140,46 @@ router.post("/table/create/:userId",
     create
 );
 
-// READ TABLE
+/**
+ * @swagger 
+ * /api/table/{tableId}/{userId}:
+ *  get:  
+ *    security:
+ *      - bearerAuth: []
+ *    parameters: 
+ *      - in: path
+ *        name: tableId
+ *        schema:
+ *           type: string
+ *           required: true
+ *        description: ID of the table to get
+ *      - in: path
+ *        name: userId
+ *        schema:
+ *           type: string
+ *           required: true
+ *        description: ID of the user's get the request
+ *    tags:
+ *      - Table
+ *    summary: Get table
+ *    description: Use to get an specific table by his ID, is used only for WAITER role
+ *    responses:
+ *      "200":
+ *        description: A sucessful response   
+ *      "203":
+ *        description: Access denied   
+ *      "400":
+ *        description: A bad request response       
+ *      "404":
+ *        description: An error according to the data provided                
+ */
 router.get("/table/:tableId/:userId",
     requireSignin,
     isAuth,
     isWaiter,
     read
 );
-
-
+ 
 /**
  * @swagger 
  * /api/table/{tableId}/{userId}:
@@ -186,6 +221,8 @@ router.get("/table/:tableId/:userId",
  *        description: Access denied            
  *      "400":
  *        description: A bad request response 
+ *      "404":
+ *        description: An error according to the data provided                
  */
 router.put("/table/:tableId/:userId",
     requireSignin,
@@ -242,6 +279,8 @@ router.put("/table/:tableId/:userId",
  *        description: Access denied            
  *      "400":
  *        description: A bad request response 
+ *      "404":
+ *        description: An error according to the data provided                
  */
 router.put("/table/update/:tableId/:userId",
     requireSignin,
@@ -269,7 +308,7 @@ router.get("/tables/areas",
  
 /**
  * @swagger 
- * /api//table/open/{tableId}/{userId}:
+ * /api/table/open/{tableId}/{userId}:
  *  put:
  *    security:
  *      - bearerAuth: []
@@ -289,7 +328,7 @@ router.get("/tables/areas",
  *    tags:
  *      - Table
  *    summary: Open a table
- *    description: Use to open only a closed table, is used only for WAITER role  
+ *    description: Use to open a closed table only, is used only for WAITER role  
  *    responses:
  *      "200":
  *        description: A sucessful response  
@@ -297,6 +336,8 @@ router.get("/tables/areas",
  *        description: Access denied            
  *      "400":
  *        description: A bad request response 
+ *      "404":
+ *        description: An error according to the data provided                
  */
 router.put("/table/open/:tableId/:userId",
     requireSignin,

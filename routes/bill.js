@@ -55,6 +55,8 @@ const { payBillValidator } = require("../validators/bill");
  *        description: Access denied         
  *      "400":
  *        description: A bad request response
+ *      "404":
+ *        description: An error according to the data provided                
  */
 router.get("/bills/paymethods/:userId", 
     requireSignin, 
@@ -87,6 +89,8 @@ router.get("/bills/paymethods/:userId",
  *        description: Access denied         
  *      "400":
  *        description: A bad request response
+ *      "404":
+ *        description: An error according to the data provided                
  */
 router.get("/bills/:userId", 
     requireSignin, 
@@ -119,6 +123,8 @@ router.get("/bills/:userId",
  *        description: Access denied         
  *      "400":
  *        description: A bad request response
+ *      "404":
+ *        description: An error according to the data provided                
  */
 router.get("/bills/all/:userId", 
     requireSignin, 
@@ -166,6 +172,8 @@ router.get("/bills/all/:userId",
  *        description: Access denied         
  *      "400":
  *        description: A bad request response
+ *      "404":
+ *        description: An error according to the data provided                
  */
 router.post("/bill/chair/:orderId/:userId", 
     requireSignin, 
@@ -207,6 +215,8 @@ router.post("/bill/chair/:orderId/:userId",
  *        description: Access denied         
  *      "400":
  *        description: A bad request response
+ *      "404":
+ *        description: An error according to the data provided                
  */
 router.post("/bill/table/:orderId/:userId", 
     requireSignin, 
@@ -241,6 +251,8 @@ router.post("/bill/table/:orderId/:userId",
  *        description: Access denied         
  *      "400":
  *        description: A bad request response
+ *      "404":
+ *        description: An error according to the data provided                
  */
 router.get("/bill/:billId", 
     requireSignin, 

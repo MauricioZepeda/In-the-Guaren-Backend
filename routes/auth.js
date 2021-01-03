@@ -1,9 +1,6 @@
 const express = require("express");
 const router = express.Router();
- 
-const { requireSignin, 
-        isAuth, 
-        isAdmin } = require("../controllers/auth");
+  
 const { signup, 
         signin, 
         signout } = require("../controllers/auth");
@@ -89,39 +86,5 @@ router.post("/signin", signInValidator, signin);
  *        description: A sucessful response             
  */
 router.get("/signout", signout);
-
-/**
- * @swagger 
- * /api/secret/{userId}:
- *  get:
- *    security:
- *      - bearerAuth: []
- *    parameters: 
- *      - in: path
- *        name: userId
- *        schema:
- *           type: string
- *           required: true
- *        description: ID of the user's get the request
- *    tags:
- *      - Auth
- *    summary: Secret access
- *    description: Use to check if an user is an admin 
- *    responses:
- *      "200":
- *        description: A sucessful response  
- *      "203":
- *        description: Access denied            
- */
-router.get("/secret/:userId", 
-    requireSignin, 
-    isAuth, 
-    isAdmin, 
-    (req, res) => {
-        res.json({
-            user: req.profile
-        });
-    }
-);
-
+ 
 module.exports = router;

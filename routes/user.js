@@ -42,6 +42,8 @@ const { updateuserValidator} = require("../validators/auth");
  *        description: Access denied                 
  *      "400":
  *        description: A bad request response
+ *      "404":
+ *        description: An error according to the data provided                
  */
 router.get("/users/:userId",    
     requireSignin, 
@@ -74,6 +76,8 @@ router.get("/users/:userId",
  *        description: Access denied                
  *      "400":
  *        description: A bad request response
+ *      "404":
+ *        description: An error according to the data provided                
  */
 router.get("/user/:userId", 
     requireSignin, 
@@ -129,6 +133,8 @@ router.get("/user/:userId",
  *        description: Access denied            
  *      "400":
  *        description: A bad request response
+ *      "404":
+ *        description: An error according to the data provided                
  */
 router.put("/user/:userId", 
     requireSignin, 
@@ -160,12 +166,52 @@ router.put("/user/:userId",
  *        description: A sucessful response  
  *      "203":
  *        description: Access denied            
+ *      "404":
+ *        description: An error according to the data provided                
  */
 router.get("/users/roles/:userId", 
     requireSignin, 
     isAuth, 
     isAdmin, 
     getRolesValues
+);
+
+/**
+ * @swagger 
+ * /api/secret/{userId}:
+ *  get:
+ *    security:
+ *      - bearerAuth: []
+ *    parameters: 
+ *      - in: path
+ *        name: userId
+ *        schema:
+ *           type: string
+ *           required: true
+ *        description: ID of the user's get the request
+ *    tags:
+ *      - User
+ *    summary: Secret access
+ *    description: Use to check if an user is an admin 
+ *    responses:
+ *      "200":
+ *        description: A sucessful response  
+ *      "203":
+ *        description: Access denied            
+ *      "400":
+ *        description: A bad request response 
+ *      "404":
+ *        description: An error according to the data provided                
+ */
+router.get("/secret/:userId", 
+    requireSignin, 
+    isAuth, 
+    isAdmin, 
+    (req, res) => {
+        res.json({
+            user: req.profile
+        });
+    }
 );
 
 // params
