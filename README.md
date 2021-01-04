@@ -83,4 +83,4 @@ And these are included in the following path that is found at the Postman folder
 ```
 **P.S: Likewise you can use postman without these variables by replacing the data manually**
  
-**Finally: The .dev file was uploaded to avoid problems with environment variables when cloning the project.**  
+**Finally: The .env file was uploaded to avoid problems with environment variables when cloning the project.**  
