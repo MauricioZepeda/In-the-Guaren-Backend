@@ -35,6 +35,12 @@ $ nodemon app.js
  
 To see the online documentation you should go to the following path. [http://localhost:5000/api-docs/](http://localhost:5000/api-docs/).
   
+### Data sctructure
+
+The structure of the data entered in the system would be the one shown in the image below
+
+![](resources/Data_Structure.png)
+
 ### User roles
  
 There are 3 types of roles for users:
@@ -61,10 +67,10 @@ There are 3 types of roles for users:
 
 ### Postman 
 
-Also all endpoints are included in [Postman](https://www.postman.com/downloads/) to facilitate testing. The file that you must import into the [Postman](https://www.postman.com/downloads/) application is at the Postman folder and it is called.
+Also all endpoints are included in [Postman](https://www.postman.com/downloads/) to facilitate testing. The file that you must import into the [Postman](https://www.postman.com/downloads/) application is at 'resources' folder and it is called.
 
 ```sh
-/postman/In the Guaren - Backend.postman_collection.json
+/resources/In the Guaren - Backend.postman_collection.json
 ```
 
 It also includes the following Postman variables that are updated when executing **SIGNIN** in postman app (they are updated automatically, except baseURL which is fixed).
@@ -73,7 +79,7 @@ These variables are **{{baseURL}}** **{{token}}** and **{{userID}}**
 And these are included in the following path that is found at the Postman folder and it is called.
  
 ```sh
-/postman/Dev.postman_environment.json
+/resources/Dev.postman_environment.json
 ```
 **P.S: Likewise you can use postman without these variables by replacing the data manually**
  
